@@ -1,2 +1,2 @@
 # wmenu
-Web Menu
+Web version of JMenu
