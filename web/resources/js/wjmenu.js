@@ -108,15 +108,17 @@ function handleScreenSearchResults(json) {
             }
         }
 
-        if (screens.length > 0) {
-            $container.append('<h2>Screens</h2><ul id="screen-search-results"></ul>');
-            var $screensContainer = $("#screen-search-results");
-
-            for (i = 0; i < screens.length; i++) {
-                $screensContainer.append(screens[i]);
-            }
-        }
+        /*if (screens.length > 0) {
+         $container.append('<h2>Screens</h2><ul id="screen-search-results"></ul>');
+         var $screensContainer = $("#screen-search-results");
+         
+         for (i = 0; i < screens.length; i++) {
+         $screensContainer.append(screens[i]);
+         }
+         }*/
     }
+
+    return screens;
 }
 
 function handleApplicationSearchResults(json) {
@@ -141,15 +143,17 @@ function handleApplicationSearchResults(json) {
             }
         }
 
-        if (applications.length > 0) {
-            $container.append('<h2>Applications</h2><ul id="application-search-results"></ul>');
-            $applicationsContainer = $("#application-search-results");
-
-            for (i = 0; i < applications.length; i++) {
-                $applicationsContainer.append(applications[i]);
-            }
-        }
+        /*if (applications.length > 0) {
+         $container.append('<h2>Applications</h2><ul id="application-search-results"></ul>');
+         $applicationsContainer = $("#application-search-results");
+         
+         for (i = 0; i < applications.length; i++) {
+         $applicationsContainer.append(applications[i]);
+         }
+         }*/
     }
+
+    return applications;
 }
 function handleDocumentSearchResults(json) {
     var $container = $("#search-results"),
@@ -165,15 +169,17 @@ function handleDocumentSearchResults(json) {
             }
         }
 
-        if (documents.length > 0) {
-            $container.append('<h2>Documents</h2><ul id="document-search-results"></ul>');
-            var $documentsContainer = $("#document-search-results");
-
-            for (i = 0; i < documents.length; i++) {
-                $documentsContainer.append(documents[i]);
-            }
-        }
+        /*if (documents.length > 0) {
+         $container.append('<h2>Documents</h2><ul id="document-search-results"></ul>');
+         var $documentsContainer = $("#document-search-results");
+         
+         for (i = 0; i < documents.length; i++) {
+         $documentsContainer.append(documents[i]);
+         }
+         }*/
     }
+
+    return documents;
 }
 function doScreenSearch(q) {
     var url = "https://accweb.acc.jlab.org/search/jmenu-cebaf/ScreenAction/_search",
@@ -275,15 +281,63 @@ function doTriSearch() {
     if (q === '') {
         console.log('nothing to search');
         return;
-    }   
+    }
 
     $input.prop("disabled", true);
     $indicator.show();
     var screenPromise = doScreenSearch(q),
             applicationPromise = doApplicationSearch(q),
-            documentPromise = doDocumentSearch(q);
+            documentPromise = doDocumentSearch(q),
+            screens = [],
+            applications = [],
+            documents = [];
 
-    $.when(screenPromise, applicationPromise, documentPromise).always(function () {
+    screenPromise.done(function (json) {
+        screens = handleScreenSearchResults(json);
+    });
+
+    applicationPromise.done(function (json) {
+        applications = handleApplicationSearchResults(json);
+    });
+
+    documentPromise.done(function (json) {
+        documents = handleDocumentSearchResults(json);
+    });
+
+    var allDone = $.when(screenPromise, applicationPromise, documentPromise);
+
+    allDone.done(function () {
+        var $container = $("#search-results");
+
+        if (screens.length > 0) {
+            $container.append('<h2>Screens</h2><ul id="screen-search-results"></ul>');
+            var $screensContainer = $("#screen-search-results");
+
+            for (i = 0; i < screens.length; i++) {
+                $screensContainer.append(screens[i]);
+            }
+        }
+
+        if (applications.length > 0) {
+            $container.append('<h2>Applications</h2><ul id="application-search-results"></ul>');
+            var $applicationsContainer = $("#application-search-results");
+
+            for (i = 0; i < applications.length; i++) {
+                $applicationsContainer.append(applications[i]);
+            }
+        }
+
+        if (documents.length > 0) {
+            $container.append('<h2>Documents</h2><ul id="document-search-results"></ul>');
+            var $documentsContainer = $("#document-search-results");
+
+            for (i = 0; i < documents.length; i++) {
+                $documentsContainer.append(documents[i]);
+            }
+        }
+    });
+
+    allDone.always(function () {
         $input.prop("disabled", false);
         $indicator.hide();
     });
