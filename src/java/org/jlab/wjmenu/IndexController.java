@@ -14,6 +14,18 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "IndexController", urlPatterns = {"/index"})
 public class IndexController extends HttpServlet {
 
+    public static final String JMENU_URL;
+    
+    static {
+        String url = System.getenv("WMENU_JMENU_URL");
+        
+        if(url == null) {
+            url = "/apps/jmenu/api/menus";
+        }
+        
+        JMENU_URL = url;
+    }    
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -25,6 +37,9 @@ public class IndexController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        request.setAttribute("menuUrl", JMENU_URL);
+        
         request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
     }
 }

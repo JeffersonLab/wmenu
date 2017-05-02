@@ -1,4 +1,5 @@
 var jlab = jlab || {};
+jlab.wmenu = jlab.wmenu || {};
 jlab.macroQueryString = function (macros) {
     var url = "",
             tokens = macros.split(",");
@@ -12,13 +13,11 @@ jlab.macroQueryString = function (macros) {
 
     return url;
 };
-function handleScreenSearchResults(json) {
+jlab.wmenu.handleScreenSearchResults = function (json) {
     var screens = [];
     if (json.hits.total > 0) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
-            /*console.log(record);*/
-
             if (record._type === 'ScreenAction') {
                 var tokens = record._source.screen.value.split(/\s+/),
                         url = '/wedm/screen?edl=' + tokens[tokens.length - 1];
@@ -28,7 +27,16 @@ function handleScreenSearchResults(json) {
                         macros = macros + tokens[j];
                     }
 
-                    macros = macros.substring(1, macros.length - 1);
+                    /*Strip optional start quote*/
+                    if(macros.indexOf('"') === 0) {
+                        macros = macros.substring(1, macros.length);
+                    }
+
+                    /*Strip optional end quote*/
+                    if(macros.lastIndexOf('"') === macros.length - 1) {
+                        macros = macros.substring(0, macros.length - 1);
+                    }
+                    
                     url = url + jlab.macroQueryString(macros);
                 }
 
@@ -40,14 +48,12 @@ function handleScreenSearchResults(json) {
     }
 
     return screens;
-}
-
-function handleApplicationSearchResults(json) {
+};
+jlab.wmenu.handleApplicationSearchResults = function (json) {
     var applications = [];
     if (json.hits.total > 0) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
-            /*console.log(record);*/
             if (record._type === 'AppAction') {
                 if (record._source.app.value.indexOf('/cs/prohome/bin/start_browser') === 0) {
                     var url = record._source.app.value.substring('/cs/prohome/bin/start_browser'.length);
@@ -65,13 +71,12 @@ function handleApplicationSearchResults(json) {
     }
 
     return applications;
-}
-function handleDocumentSearchResults(json) {
+};
+jlab.wmenu.handleDocumentSearchResults = function (json) {
     var documents = [];
     if (json.hits.total > 0) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
-            /*console.log(record);*/
             if (record._type === 'WebAction') {
                 documents.push('<li><a href="' + record._source.doc.value + '">' + record._source.label + '</a></li>');
             } else {
@@ -81,8 +86,8 @@ function handleDocumentSearchResults(json) {
     }
 
     return documents;
-}
-function doScreenSearch(q) {
+};
+jlab.wmenu.doScreenSearch = function (q) {
     var url = "https://accweb.acc.jlab.org/search/jmenu-cebaf/ScreenAction/_search",
             data = {q: q, size: 10, from: 0};
 
@@ -93,8 +98,7 @@ function doScreenSearch(q) {
         dataType: "json"
     });
     promise.done(function (json) {
-        /*console.log(json);*/
-        handleScreenSearchResults(json);
+        jlab.wmenu.handleScreenSearchResults(json);
     });
     promise.error(function (xhr, textStatus) {
         var json;
@@ -110,9 +114,8 @@ function doScreenSearch(q) {
     });
 
     return promise;
-}
-
-function doApplicationSearch(q) {
+};
+jlab.wmenu.doApplicationSearch = function (q) {
     var url = "https://accweb.acc.jlab.org/search/jmenu-cebaf/AppAction/_search",
             data = {q: q, size: 10, from: 0};
 
@@ -123,8 +126,7 @@ function doApplicationSearch(q) {
         dataType: "json"
     });
     promise.done(function (json) {
-        /*console.log(json);*/
-        handleApplicationSearchResults(json);
+        jlab.wmenu.handleApplicationSearchResults(json);
     });
     promise.error(function (xhr, textStatus) {
         var json;
@@ -140,9 +142,8 @@ function doApplicationSearch(q) {
     });
 
     return promise;
-}
-
-function doDocumentSearch(q) {
+};
+jlab.wmenu.doDocumentSearch = function (q) {
     var url = "https://accweb.acc.jlab.org/search/jmenu-cebaf/WebAction/_search",
             data = {q: q, size: 10, from: 0};
 
@@ -153,8 +154,7 @@ function doDocumentSearch(q) {
         dataType: "json"
     });
     promise.done(function (json) {
-        /*console.log(json);*/
-        handleDocumentSearchResults(json);
+        jlab.wmenu.handleDocumentSearchResults(json);
     });
     promise.error(function (xhr, textStatus) {
         var json;
@@ -170,9 +170,8 @@ function doDocumentSearch(q) {
     });
 
     return promise;
-}
-
-function doTriSearch() {
+};
+jlab.wmenu.doTriSearch = function () {
     var $input = $("#search-input"),
             $indicator = $("#indicator"),
             q = $input.val();
@@ -186,23 +185,23 @@ function doTriSearch() {
 
     $input.prop("disabled", true);
     $indicator.show();
-    var screenPromise = doScreenSearch(q),
-            applicationPromise = doApplicationSearch(q),
-            documentPromise = doDocumentSearch(q),
+    var screenPromise = jlab.wmenu.doScreenSearch(q),
+            applicationPromise = jlab.wmenu.doApplicationSearch(q),
+            documentPromise = jlab.wmenu.doDocumentSearch(q),
             screens = [],
             applications = [],
             documents = [];
 
     screenPromise.done(function (json) {
-        screens = handleScreenSearchResults(json);
+        screens = jlab.wmenu.handleScreenSearchResults(json);
     });
 
     applicationPromise.done(function (json) {
-        applications = handleApplicationSearchResults(json);
+        applications = jlab.wmenu.handleApplicationSearchResults(json);
     });
 
     documentPromise.done(function (json) {
-        documents = handleDocumentSearchResults(json);
+        documents = jlab.wmenu.handleDocumentSearchResults(json);
     });
 
     var allDone = $.when(screenPromise, applicationPromise, documentPromise);
@@ -242,10 +241,51 @@ function doTriSearch() {
         $input.prop("disabled", false);
         $indicator.hide();
     });
-}
+};
+jlab.wmenu.handleMainMenuResults = function (json) {
+    console.log(json);
+};
+jlab.wmenu.loadMainMenu = function () {
+    var url = jlab.wmenu.menuUrl + '/MainMenu',
+            data = {definitions: 1},
+    dataType = "json",
+            options = {url: url, type: 'GET', data: data, dataType: dataType};
 
+    if (url.indexOf("/") !== 0) {
+        dataType = "jsonp";
+        options.dataType = dataType;
+        options.jsonp = 'jsonp';
+    }
+
+    var promise = $.ajax(options);
+    
+    promise.done(function (json) {
+        jlab.wmenu.handleMainMenuResults(json);
+    });
+    promise.error(function (xhr, textStatus) {
+        var json;
+        try {
+            if (typeof xhr.responseText === 'undefined' || xhr.responseText === '') {
+                json = {};
+            } else {
+                json = $.parseJSON(xhr.responseText);
+            }
+        } catch (err) {
+            window.console && console.log('Response is not JSON: ' + xhr.responseText);
+            json = {};
+        }
+
+        var message = json.error || 'Server did not handle request';
+        alert('Unable to perform request: ' + message);
+    });
+
+    return promise;
+};
 $(document).on("keyup", "#search-input", function (e) {
     if (e.keyCode === 13) {
-        doTriSearch();
+        jlab.wmenu.doTriSearch();
     }
+});
+$(function () {
+    jlab.wmenu.loadMainMenu();
 });
