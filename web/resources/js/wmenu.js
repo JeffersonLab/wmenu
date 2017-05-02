@@ -28,15 +28,15 @@ jlab.wmenu.handleScreenSearchResults = function (json) {
                     }
 
                     /*Strip optional start quote*/
-                    if(macros.indexOf('"') === 0) {
+                    if (macros.indexOf('"') === 0) {
                         macros = macros.substring(1, macros.length);
                     }
 
                     /*Strip optional end quote*/
-                    if(macros.lastIndexOf('"') === macros.length - 1) {
+                    if (macros.lastIndexOf('"') === macros.length - 1) {
                         macros = macros.substring(0, macros.length - 1);
                     }
-                    
+
                     url = url + jlab.macroQueryString(macros);
                 }
 
@@ -244,6 +244,28 @@ jlab.wmenu.doTriSearch = function () {
 };
 jlab.wmenu.handleMainMenuResults = function (json) {
     console.log(json);
+    var $container = $("#container");
+    for (var i = 0; i < json.data.sections.length; i++) {
+        var $section = $('<ul class="section"></ul>');
+
+        $(json.data.sections[i].items).each(function () {
+            var def;
+            if (this.type === 'menu') {
+                def = json.data.menuDefs[this.id];
+            } else if (this.type === 'action') {
+                def = json.data.actionDefs[this.id];
+            } else {
+                console.log('unknown type: ' + this.type);
+            }
+            $section.append('<li class="jmenu-' + this.type + '"><a href="#">' + def.label + '</a></li>');
+        });
+
+        $container.append($section);
+
+        if (i < json.data.sections.length - 1) {
+            $container.append('<div class="hr-container"><hr/></div>');
+        }
+    }
 };
 jlab.wmenu.loadMainMenu = function () {
     var url = jlab.wmenu.menuUrl + '/MainMenu',
@@ -258,7 +280,7 @@ jlab.wmenu.loadMainMenu = function () {
     }
 
     var promise = $.ajax(options);
-    
+
     promise.done(function (json) {
         jlab.wmenu.handleMainMenuResults(json);
     });

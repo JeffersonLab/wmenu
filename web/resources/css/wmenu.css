@@ -69,3 +69,21 @@ a.disabled-item {
     color: rgb(169,168,165);
     text-shadow: -0.5px 0 gray;
 }
+hr {
+    border-top: 1px solid rgb(106,104,100);
+    border-bottom: 1px solid white;
+    position: absolute;
+    height: 2px;
+    top: -4px;
+    left: 0;
+    right: 1px;
+}
+.hr-container {
+    position: relative;
+    height: 8px;
+    width: 100%;
+    background-color: rgb(212,208,200);
+}
+.section {
+
+}
