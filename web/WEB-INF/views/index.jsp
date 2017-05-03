@@ -16,7 +16,7 @@
             <h1>WMenu</h1>
             <input id="search-input" type="search" placeholder="Search"/>
         </div>
-        <div data-role="page" id="MainMenu-page-root">
+        <div data-role="page" id="MainMenu-page">
             <div data-role="header">
                 <h2>Main Menu</h2>
             </div>

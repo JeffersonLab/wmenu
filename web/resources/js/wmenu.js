@@ -1,3 +1,28 @@
+if (!String.prototype.encodeXml) {
+    String.prototype.encodeXml = function () {
+        return this.replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/'/g, '&apos;')
+                .replace(/"/g, '&quot;');
+    };
+}
+if (!String.prototype.stripQuotes) {
+    String.prototype.stripQuotes = function () {
+        var str = this;
+        /*Strip optional start quote*/
+        if (str.indexOf('"') === 0) {
+            str = str.substring(1, str.length);
+        }
+
+        /*Strip optional end quote*/
+        if (str.lastIndexOf('"') === str.length - 1) {
+            str = str.substring(0, str.length - 1);
+        }
+
+        return str;
+    };
+}
 var jlab = jlab || {};
 jlab.wmenu = jlab.wmenu || {};
 jlab.macroQueryString = function (macros) {
@@ -19,28 +44,7 @@ jlab.wmenu.handleScreenSearchResults = function (json) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
             if (record._type === 'ScreenAction') {
-                var tokens = record._source.screen.value.split(/\s+/),
-                        url = '/wedm/screen?edl=' + tokens[tokens.length - 1];
-                if (tokens[0].indexOf("edmRun") === 0 && tokens[1].indexOf("-m") === 0) {
-                    var macros = tokens[2];
-                    for (var j = 3; j < tokens.length - 1; j++) {
-                        macros = macros + tokens[j];
-                    }
-
-                    /*Strip optional start quote*/
-                    if (macros.indexOf('"') === 0) {
-                        macros = macros.substring(1, macros.length);
-                    }
-
-                    /*Strip optional end quote*/
-                    if (macros.lastIndexOf('"') === macros.length - 1) {
-                        macros = macros.substring(0, macros.length - 1);
-                    }
-
-                    url = url + jlab.macroQueryString(macros);
-                }
-
-                screens.push('<li><a rel="external" href="' + url + '">' + record._source.label + '</a></li>');
+                screens.push(jlab.wmenu.createScreenActionLi({label: record._source.label, value: record._source.screen.value, type: record._source.screen.type}));
             } else {
                 console.log('wrong type while parsing screens: ' + record._type);
             }
@@ -55,15 +59,16 @@ jlab.wmenu.handleApplicationSearchResults = function (json) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
             if (record._type === 'AppAction') {
-                if (record._source.app.value.indexOf('/cs/prohome/bin/start_browser') === 0) {
-                    var url = record._source.app.value.substring('/cs/prohome/bin/start_browser'.length);
-                    applications.push('<li><a rel="external" href="' + url + '">' + record._source.label + '</a></li>');
-                } else if (record._source.app.value.indexOf('start_browser') === 0) {
-                    var url = record._source.app.value.substring('start_browser'.length);
-                    applications.push('<li><a rel="external" href="' + url + '">' + record._source.label + '</a></li>');
-                } else {
-                    applications.push('<li><a class="disabled-item" href="#">' + record._source.label + '</a></li>');
-                }
+                applications.push(jlab.wmenu.createAppActionLi({label: record._source.label, value: record._source.app.value}));
+                /*if (record._source.app.value.indexOf('/cs/prohome/bin/start_browser') === 0) {
+                 var url = record._source.app.value.substring('/cs/prohome/bin/start_browser'.length);
+                 applications.push('<li><a rel="external" href="' + url + '">' + record._source.label + '</a></li>');
+                 } else if (record._source.app.value.indexOf('start_browser') === 0) {
+                 var url = record._source.app.value.substring('start_browser'.length);
+                 applications.push('<li><a rel="external" href="' + url + '">' + record._source.label + '</a></li>');
+                 } else {
+                 applications.push('<li><a class="disabled-item" href="#">' + record._source.label + '</a></li>');
+                 }*/
             } else {
                 console.log('wrong type for applications: ' + record._type);
             }
@@ -78,7 +83,8 @@ jlab.wmenu.handleDocumentSearchResults = function (json) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
             if (record._type === 'WebAction') {
-                documents.push('<li><a rel="external" href="' + record._source.doc.value + '">' + record._source.label + '</a></li>');
+                documents.push(jlab.wmenu.createWebActionLi({label: record._source.label, value: record._source.doc.value}));
+                /*documents.push('<li><a rel="external" href="' + record._source.doc.value + '">' + record._source.label + '</a></li>');*/
             } else {
                 console.log('wrong type for document: ' + record._type);
             }
@@ -250,34 +256,72 @@ jlab.wmenu.doTriSearch = function () {
         $.mobile.loading("hide");
     });
 };
-jlab.wmenu.handleMainMenuResults = function (json) {
-    console.log(json);
-    var $container = $("#MainMenu-page-root .ui-content");
-    for (var i = 0; i < json.data.sections.length; i++) {
-        var $section = $('<ul data-role="listview" data-inset="true" class="section"></ul>');
-
-        $(json.data.sections[i].items).each(function () {
-            var def;
-            if (this.type === 'menu') {
-                def = json.data.menuDefs[this.id];
-                jlab.wmenu.addPage(def, json.data.menuDefs, json.data.actionDefs);
-            } else if (this.type === 'action') {
-                def = json.data.actionDefs[this.id];
-            } else {
-                console.log('unknown type: ' + this.type);
-            }
-            $section.append('<li class="jmenu-' + this.type + '"><a href="#' + this.id + '-page">' + def.label + '</a></li>');
-        });
-
-        $container.append($section);
-        $section.listview().listview("refresh");
-
-        if (i < json.data.sections.length - 1) {
-            $container.append('<div class="hr-container"><hr/></div>');
-        }
+/*{label: label, value: value}*/
+jlab.wmenu.createAppActionLi = function (record) {
+    var li;
+    if (record.value.indexOf('/cs/prohome/bin/start_browser') === 0) {
+        var url = record.value.substring('/cs/prohome/bin/start_browser'.length).trim().stripQuotes();
+        li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
+    } else if (record.value.indexOf('start_browser') === 0) {
+        var url = record.value.substring('start_browser'.length).trim().stripQuotes();
+        li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
+    } else if (record.value.indexOf('firefox') === 0) {
+        var url = record.value.substring('firefox'.length).trim().stripQuotes();
+        li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
+    } else {
+        li = '<li class="disabled-item">' + record.label + '</li>';
     }
+
+    return li;
 };
-jlab.wmenu.addPage = function (menu, menuDefs, actionDefs) {
+/*{label: label, value: value}*/
+jlab.wmenu.createWebActionLi = function (record) {
+    var li;
+
+    li = '<li><a rel="external" href="' + record.value + '">' + record.label + '</a></li>';
+
+    return li;
+};
+/*{label: label, value: value, type: type}*/
+jlab.wmenu.createScreenActionLi = function (record) {
+    var li;
+
+    /*If value is exactly 'edmRun' without params then don't try to link*/
+    if (record.value.trim() !== 'edmRun' && (record.type === 'edl' || record.type === 'run')) {
+        /*console.log(record);*/
+        var tokens = record.value.split(/\s+/),
+                url = '/wedm/screen?edl=' + tokens[tokens.length - 1];
+        if (tokens.length > 1 && tokens[0].indexOf("edmRun") === 0 && tokens[1].indexOf("-m") === 0) {
+            var macros = tokens[2];
+            for (var j = 3; j < tokens.length - 1; j++) {
+                macros = macros + tokens[j];
+            }
+
+            macros.stripQuotes();
+
+            url = url + jlab.macroQueryString(macros);
+        }
+
+        li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
+    } else { /*record.type === 'otf'*/
+        li = '<li data-debug="' + record.type + '">' + record.label + '</li>';
+    }
+    return li;
+};
+jlab.wmenu.handleMainMenuResults = function (json) {
+    jlab.wmenu.menuDefs = json.data.menuDefs;
+    jlab.wmenu.actionDefs = json.data.actionDefs;
+    /*console.log(json);*/
+
+    var menu = {id: 'MainMenu', label: 'Main Menu', sections: json.data.sections};
+
+    $("#MainMenu-page").remove();
+
+    jlab.wmenu.addPage(menu);
+
+    $(":mobile-pagecontainer").pagecontainer("change", "#MainMenu-page");
+};
+jlab.wmenu.addPage = function (menu) {
     var id = menu.id + '-page',
             $page = $('<div id="' + id + '" data-role="page"><div data-role="header"><h2>' + menu.label + '</h2></div><div role="main" class="ui-content"></div><div data-role="footer"></div></div>'),
             $body = $("body"),
@@ -289,19 +333,30 @@ jlab.wmenu.addPage = function (menu, menuDefs, actionDefs) {
     }
 
     $body.append($page);
-    //$page.trigger("create");
     for (var i = 0; i < menu.sections.length; i++) {
         var $section = $('<ul data-role="listview" data-inset="true" class="section"></ul>');
 
         $(menu.sections[i].items).each(function () {
             var def;
             if (this.type === 'menu') {
-                def = menuDefs[this.id];
+                def = jlab.wmenu.menuDefs[this.id];
                 $section.append('<li class="jmenu-' + this.type + '"><a href="#' + this.id + '-page">' + def.label + '</a></li>');
-                jlab.wmenu.addPage(def, menuDefs, actionDefs);
+                jlab.wmenu.addPage(def);
             } else if (this.type === 'action') {
-                def = actionDefs[this.id];
-                $section.append('<li class="jmenu-' + this.type + '">' + def.label + '</li>');
+                def = jlab.wmenu.actionDefs[this.id];
+                /*console.log(def);*/
+                var li;
+                if (def.type === 'AppAction') {
+                    li = jlab.wmenu.createAppActionLi({label: def.label, value: def.action.app});
+                } else if (def.type === 'WebAction') {
+                    li = jlab.wmenu.createWebActionLi({label: def.label, value: def.action.doc});
+                } else if (def.type === 'ScreenAction') {
+                    /*console.log(def);*/
+                    li = jlab.wmenu.createScreenActionLi({label: def.label, value: def.action.screen, type: def.action.type});
+                } else {
+                    console.log('unknown action sub-type: ' + def.type);
+                }
+                $section.append(li);
             } else if (this.type === 'menutext') {
                 $section.append('<li class="jmenu-' + this.type + '">' + this.text + '</li>');
             } else {
@@ -317,7 +372,6 @@ jlab.wmenu.addPage = function (menu, menuDefs, actionDefs) {
             $content.append('<div class="hr-container"><hr/></div>');
         }
     }
-    //$page.page().page("refresh");
 };
 jlab.wmenu.loadMainMenu = function () {
     var url = jlab.wmenu.menuUrl + '/MainMenu',
@@ -365,17 +419,17 @@ $(document).on("pageshow", function () {
     var $page = $(".ui-page-active"),
             id = $page.attr("id"),
             $previousBtn = $("#previous-button");
-    if (id === 'MainMenu-page-root') {
+    if (id === 'MainMenu-page') {
         $previousBtn.hide();
     } else {
         $previousBtn.show();
     }
 });
-$( document ).on( "mobileinit", function() {
-  $.mobile.loader.prototype.options.text = "loading";
-  $.mobile.loader.prototype.options.textVisible = true;
-  $.mobile.loader.prototype.options.theme = "a";
-  $.mobile.loader.prototype.options.html = "";
+$(document).on("mobileinit", function () {
+    $.mobile.loader.prototype.options.text = "loading";
+    $.mobile.loader.prototype.options.textVisible = true;
+    $.mobile.loader.prototype.options.theme = "a";
+    $.mobile.loader.prototype.options.html = "";
 });
 $(function () {
     $("#search-panel").toolbar({theme: "a"});
