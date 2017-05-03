@@ -40,7 +40,7 @@ jlab.wmenu.handleScreenSearchResults = function (json) {
                     url = url + jlab.macroQueryString(macros);
                 }
 
-                screens.push('<li><a href="' + url + '">' + record._source.label + '</a></li>');
+                screens.push('<li><a rel="external" href="' + url + '">' + record._source.label + '</a></li>');
             } else {
                 console.log('wrong type while parsing screens: ' + record._type);
             }
@@ -57,10 +57,10 @@ jlab.wmenu.handleApplicationSearchResults = function (json) {
             if (record._type === 'AppAction') {
                 if (record._source.app.value.indexOf('/cs/prohome/bin/start_browser') === 0) {
                     var url = record._source.app.value.substring('/cs/prohome/bin/start_browser'.length);
-                    applications.push('<li><a href="' + url + '">' + record._source.label + '</a></li>');
+                    applications.push('<li><a rel="external" href="' + url + '">' + record._source.label + '</a></li>');
                 } else if (record._source.app.value.indexOf('start_browser') === 0) {
                     var url = record._source.app.value.substring('start_browser'.length);
-                    applications.push('<li><a href="' + url + '">' + record._source.label + '</a></li>');
+                    applications.push('<li><a rel="external" href="' + url + '">' + record._source.label + '</a></li>');
                 } else {
                     applications.push('<li><a class="disabled-item" href="#">' + record._source.label + '</a></li>');
                 }
@@ -78,7 +78,7 @@ jlab.wmenu.handleDocumentSearchResults = function (json) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
             if (record._type === 'WebAction') {
-                documents.push('<li><a href="' + record._source.doc.value + '">' + record._source.label + '</a></li>');
+                documents.push('<li><a rel="external" href="' + record._source.doc.value + '">' + record._source.label + '</a></li>');
             } else {
                 console.log('wrong type for document: ' + record._type);
             }
@@ -184,7 +184,9 @@ jlab.wmenu.doTriSearch = function () {
     }
 
     $input.prop("disabled", true);
-    $indicator.show();
+
+    $.mobile.loading("show", {defaults: true});
+
     var screenPromise = jlab.wmenu.doScreenSearch(q),
             applicationPromise = jlab.wmenu.doApplicationSearch(q),
             documentPromise = jlab.wmenu.doDocumentSearch(q),
@@ -245,7 +247,7 @@ jlab.wmenu.doTriSearch = function () {
 
     allDone.always(function () {
         $input.prop("disabled", false);
-        $indicator.hide();
+        $.mobile.loading("hide");
     });
 };
 jlab.wmenu.handleMainMenuResults = function (json) {
@@ -280,12 +282,12 @@ jlab.wmenu.addPage = function (menu, menuDefs, actionDefs) {
             $page = $('<div id="' + id + '" data-role="page"><div data-role="header"><h2>' + menu.label + '</h2></div><div role="main" class="ui-content"></div><div data-role="footer"></div></div>'),
             $body = $("body"),
             $content = $page.find(".ui-content");
-    
-    if($("#" + id).length) {
+
+    if ($("#" + id).length) {
         /*console.log('Menu page already exists: ' + id);*/
         return;
     }
-    
+
     $body.append($page);
     //$page.trigger("create");
     for (var i = 0; i < menu.sections.length; i++) {
@@ -295,13 +297,13 @@ jlab.wmenu.addPage = function (menu, menuDefs, actionDefs) {
             var def;
             if (this.type === 'menu') {
                 def = menuDefs[this.id];
-                $section.append('<li class="jmenu-' + this.type + '"><a href="#' + this.id + '-page">' + def.label + '</a></li>'); 
+                $section.append('<li class="jmenu-' + this.type + '"><a href="#' + this.id + '-page">' + def.label + '</a></li>');
                 jlab.wmenu.addPage(def, menuDefs, actionDefs);
             } else if (this.type === 'action') {
                 def = actionDefs[this.id];
-                $section.append('<li class="jmenu-' + this.type + '">' + def.label + '</li>');                
-            } else if(this.type === 'menutext') {
-                $section.append('<li class="jmenu-' + this.type + '">' + this.text + '</li>'); 
+                $section.append('<li class="jmenu-' + this.type + '">' + def.label + '</li>');
+            } else if (this.type === 'menutext') {
+                $section.append('<li class="jmenu-' + this.type + '">' + this.text + '</li>');
             } else {
                 console.log('unknown type: ' + this.type);
                 return true;
@@ -369,7 +371,12 @@ $(document).on("pageshow", function () {
         $previousBtn.show();
     }
 });
-
+$( document ).on( "mobileinit", function() {
+  $.mobile.loader.prototype.options.text = "loading";
+  $.mobile.loader.prototype.options.textVisible = true;
+  $.mobile.loader.prototype.options.theme = "a";
+  $.mobile.loader.prototype.options.html = "";
+});
 $(function () {
     $("#search-panel").toolbar({theme: "a"});
     jlab.wmenu.loadMainMenu();

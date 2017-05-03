@@ -15,7 +15,6 @@
             <a id="previous-button" href="#" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
             <h1>WMenu</h1>
             <input id="search-input" type="search" placeholder="Search"/>
-            <img src="resources/img/indicator16x16.gif" alt="Activity Indicator" width="16" height="16" id="indicator" style="display: none;"/>
         </div>
         <div data-role="page" id="MainMenu-page-root">
             <div data-role="header">

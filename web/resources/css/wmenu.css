@@ -1,3 +1,6 @@
+.ui-content .section:first-child {
+    margin-top: 0;
+}
 #search-panel .ui-input-search {
     margin: 0.5em;
 }
