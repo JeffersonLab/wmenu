@@ -1,4 +1,11 @@
-#page {
+#search-panel .ui-input-search {
+    margin: 0.5em;
+}
+.ui-header h2.ui-title {
+    margin: 0 0.5em;
+    text-align: left;
+}
+/*#page {
     background-color: rgb(237,236,235);
     font-family: arial, sans-serif;
     font-size: 14px;
@@ -83,7 +90,4 @@ hr {
     height: 8px;
     width: 100%;
     background-color: rgb(212,208,200);
-}
-.section {
-
-}
+}*/

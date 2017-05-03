@@ -7,27 +7,39 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>WMenu</title>
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.mobile-1.4.5.min.css"/>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/wmenu.css?v=${initParam.releaseNumber}"/>
     </head>
     <body>
-        <h1>WMenu</h1>
-        <div id="page">
-            <div id="page-top-bevel">
-                <div id="page-bottom-bevel">
-                    <div id="container">
-                        <div id="search-panel">
-                            <img src="resources/img/search.png" alt="Search" width="27" height="29" id="search-icon"/>
-                            <input id="search-input" type="text" placeholder="Search"/>
-                            <img src="resources/img/indicator16x16.gif" alt="Activity Indicator" width="16" height="16" id="indicator" style="display: none;"/>
-                        </div>   
-                        <div id="search-results">
+        <div id="search-panel" data-role="header" data-position="fixed" data-theme="a">
+            <a id="previous-button" href="#" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+            <h1>WMenu</h1>
+            <input id="search-input" type="search" placeholder="Search"/>
+            <img src="resources/img/indicator16x16.gif" alt="Activity Indicator" width="16" height="16" id="indicator" style="display: none;"/>
+        </div>
+        <div data-role="page" id="MainMenu-page-root">
+            <div data-role="header">
+                <h2>Main Menu</h2>
+            </div>
+            <div role="main" class="ui-content">
+            </div>
+            <div data-role="footer">
+            </div>            
+        </div>        
+        <div data-role="page" id="search-page-root">
+            <div data-role="header">
+                <h2>Search Results</h2>
+            </div>
+            <div role="main" class="ui-content">   
+                <div id="search-results">
 
-                        </div>
-                    </div>
                 </div>
             </div>
+            <div data-role="footer">
+            </div>
         </div>
-        <script type="text/javascript" src="/epics2web/resources/js/jquery-1.10.2.min.js"></script>        
+        <script type="text/javascript" src="/epics2web/resources/js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.mobile-1.4.5.min.js"></script>        
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/wmenu.js?v=${initParam.releaseNumber}"></script>
         <script type="text/javascript">
             jlab.wmenu.menuUrl = '${fn:escapeXml(menuUrl)}';
