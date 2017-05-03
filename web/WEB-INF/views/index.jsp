@@ -7,6 +7,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>WMenu</title>
+        <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/favicon.ico?v=${initParam.releaseNumber}"/>        
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.mobile-1.4.5.min.css"/>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/wmenu.css?v=${initParam.releaseNumber}"/>
     </head>
@@ -21,8 +22,6 @@
                 <h2>Main Menu</h2>
             </div>
             <div role="main" class="ui-content">
-            </div>
-            <div data-role="footer">
             </div>            
         </div>        
         <div data-role="page" id="search-page-root">
@@ -33,8 +32,6 @@
                 <div id="search-results">
 
                 </div>
-            </div>
-            <div data-role="footer">
             </div>
         </div>
         <script type="text/javascript" src="/epics2web/resources/js/jquery-1.10.2.min.js"></script>

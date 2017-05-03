@@ -323,7 +323,7 @@ jlab.wmenu.handleMainMenuResults = function (json) {
 };
 jlab.wmenu.addPage = function (menu) {
     var id = menu.id + '-page',
-            $page = $('<div id="' + id + '" data-role="page"><div data-role="header"><h2>' + menu.label + '</h2></div><div role="main" class="ui-content"></div><div data-role="footer"></div></div>'),
+            $page = $('<div id="' + id + '" data-role="page"><div data-role="header"><h2>' + menu.label + '</h2></div><div role="main" class="ui-content"></div></div>'),
             $body = $("body"),
             $content = $page.find(".ui-content");
 
@@ -411,8 +411,8 @@ jlab.wmenu.loadMainMenu = function () {
 };
 $(document).on("keyup", "#search-input", function (e) {
     if (e.keyCode === 13) {
-        jlab.wmenu.doTriSearch();
         $(":mobile-pagecontainer").pagecontainer("change", "#search-page-root");
+        jlab.wmenu.doTriSearch();        
     }
 });
 $(document).on("pageshow", function () {
