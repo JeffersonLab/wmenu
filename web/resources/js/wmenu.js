@@ -60,15 +60,6 @@ jlab.wmenu.handleApplicationSearchResults = function (json) {
             var record = json.hits.hits[i];
             if (record._type === 'AppAction') {
                 applications.push(jlab.wmenu.createAppActionLi({label: record._source.label, value: record._source.app.value}));
-                /*if (record._source.app.value.indexOf('/cs/prohome/bin/start_browser') === 0) {
-                 var url = record._source.app.value.substring('/cs/prohome/bin/start_browser'.length);
-                 applications.push('<li><a rel="external" href="' + url + '">' + record._source.label + '</a></li>');
-                 } else if (record._source.app.value.indexOf('start_browser') === 0) {
-                 var url = record._source.app.value.substring('start_browser'.length);
-                 applications.push('<li><a rel="external" href="' + url + '">' + record._source.label + '</a></li>');
-                 } else {
-                 applications.push('<li><a class="disabled-item" href="#">' + record._source.label + '</a></li>');
-                 }*/
             } else {
                 console.log('wrong type for applications: ' + record._type);
             }
@@ -84,7 +75,6 @@ jlab.wmenu.handleDocumentSearchResults = function (json) {
             var record = json.hits.hits[i];
             if (record._type === 'WebAction') {
                 documents.push(jlab.wmenu.createWebActionLi({label: record._source.label, value: record._source.doc.value}));
-                /*documents.push('<li><a rel="external" href="' + record._source.doc.value + '">' + record._source.label + '</a></li>');*/
             } else {
                 console.log('wrong type for document: ' + record._type);
             }
@@ -179,7 +169,6 @@ jlab.wmenu.doDocumentSearch = function (q) {
 };
 jlab.wmenu.doTriSearch = function () {
     var $input = $("#search-input"),
-            $indicator = $("#indicator"),
             q = $input.val();
 
     $("#search-results").empty();
