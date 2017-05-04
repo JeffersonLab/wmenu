@@ -297,7 +297,7 @@ jlab.wmenu.createScreenActionLi = function (record) {
                 macros = macros + tokens[j];
             }
 
-            macros.stripQuotes();
+            macros = macros.stripQuotes();
 
             url = url + jlab.macroQueryString(macros);
         }
