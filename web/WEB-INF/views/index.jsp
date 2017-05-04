@@ -12,11 +12,11 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/wmenu.css?v=${initParam.releaseNumber}"/>
     </head>
     <body>
-        <div id="search-panel" data-role="header" data-position="fixed" data-theme="a">
+        <div id="header-panel" data-role="header" data-position="fixed" data-theme="a">
             <a id="previous-button" href="#" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
             <h1>WMenu</h1>
             <input id="search-input" type="search" placeholder="Search"/>
-        </div>
+        </div>        
         <div data-role="page" id="MainMenu-page">
             <div data-role="header">
                 <h2></h2>
@@ -34,6 +34,9 @@
                 </div>
             </div>
         </div>
+        <div id="footer-panel" data-role="footer" data-position="fixed" data-theme="a">
+            <div id="version">Version: ${initParam.releaseNumber} (${initParam.releaseDate})</div> 
+        </div>        
         <script type="text/javascript" src="/epics2web/resources/js/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.mobile-1.4.5.min.js"></script>        
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/wmenu.js?v=${initParam.releaseNumber}"></script>

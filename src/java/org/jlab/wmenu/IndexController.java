@@ -1,4 +1,4 @@
-package org.jlab.wjmenu;
+package org.jlab.wmenu;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

@@ -429,6 +429,7 @@ $(document).bind("mobileinit", function () {
     $.mobile.autoInitialize = false;
 });
 $(function () {
-    $("#search-panel").toolbar({theme: "a"});
+    $("#header-panel").toolbar({theme: "a"});
+    $("#footer-panel").toolbar({theme: "a"});
     jlab.wmenu.loadMainMenu();
 });
