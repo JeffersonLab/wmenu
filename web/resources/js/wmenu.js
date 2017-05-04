@@ -180,7 +180,7 @@ jlab.wmenu.doTriSearch = function () {
 
     $input.prop("disabled", true);
 
-    $.mobile.loading("show", {defaults: true});
+    $.mobile.loading("show", {textVisible: true, theme: "b"});
 
     var screenPromise = jlab.wmenu.doScreenSearch(q),
             applicationPromise = jlab.wmenu.doApplicationSearch(q),
@@ -304,11 +304,16 @@ jlab.wmenu.handleMainMenuResults = function (json) {
 
     var menu = {id: 'MainMenu', label: 'Main Menu', sections: json.data.sections};
 
+    /*This isn't really the MainMenu-page, just a placeholder */
     $("#MainMenu-page").remove();
 
     jlab.wmenu.addPage(menu);
 
-    $(":mobile-pagecontainer").pagecontainer("change", "#MainMenu-page");
+    /*We need MainMenu-page to be first page*/
+    $("#search-page-root").insertAfter("#MainMenu-page");
+
+    $.mobile.initializePage();
+    /*$(":mobile-pagecontainer").pagecontainer("change", "#MainMenu-page");*/
 };
 jlab.wmenu.addPage = function (menu) {
     var id = menu.id + '-page',
@@ -363,6 +368,9 @@ jlab.wmenu.addPage = function (menu) {
     }
 };
 jlab.wmenu.loadMainMenu = function () {
+
+    $.mobile.loading("show", {textVisible: true, theme: "b"});
+
     var url = jlab.wmenu.menuUrl + '/MainMenu',
             data = {definitions: 1},
     dataType = "json",
@@ -395,13 +403,16 @@ jlab.wmenu.loadMainMenu = function () {
         var message = json.error || 'Server did not handle request';
         alert('Unable to perform request: ' + message);
     });
+    promise.always(function () {
+        $.mobile.loading("hide");        
+    });
 
     return promise;
 };
 $(document).on("keyup", "#search-input", function (e) {
     if (e.keyCode === 13) {
         $(":mobile-pagecontainer").pagecontainer("change", "#search-page-root");
-        jlab.wmenu.doTriSearch();        
+        jlab.wmenu.doTriSearch();
     }
 });
 $(document).on("pageshow", function () {
@@ -414,11 +425,8 @@ $(document).on("pageshow", function () {
         $previousBtn.show();
     }
 });
-$(document).on("mobileinit", function () {
-    $.mobile.loader.prototype.options.text = "loading";
-    $.mobile.loader.prototype.options.textVisible = true;
-    $.mobile.loader.prototype.options.theme = "a";
-    $.mobile.loader.prototype.options.html = "";
+$(document).bind("mobileinit", function () {
+    $.mobile.autoInitialize = false;
 });
 $(function () {
     $("#search-panel").toolbar({theme: "a"});

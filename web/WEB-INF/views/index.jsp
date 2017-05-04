@@ -19,7 +19,7 @@
         </div>
         <div data-role="page" id="MainMenu-page">
             <div data-role="header">
-                <h2>Main Menu</h2>
+                <h2></h2>
             </div>
             <div role="main" class="ui-content">
             </div>            
