@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class IndexController extends HttpServlet {
 
     public static final String JMENU_URL;
+    public static final String SEARCH_URL;
     
     static {
         String url = System.getenv("WMENU_JMENU_URL");
@@ -24,6 +25,14 @@ public class IndexController extends HttpServlet {
         }
         
         JMENU_URL = url;
+        
+        url = System.getenv("WMENU_SEARCH_URL");
+        
+        if(url == null) {
+            url = "/search/jmenu-cebaf";
+        }
+        
+        SEARCH_URL = url;        
     }    
     
     /**
@@ -39,6 +48,7 @@ public class IndexController extends HttpServlet {
             throws ServletException, IOException {
         
         request.setAttribute("menuUrl", JMENU_URL);
+        request.setAttribute("searchUrl", SEARCH_URL);
         
         request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
     }

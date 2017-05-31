@@ -84,7 +84,7 @@ jlab.wmenu.handleDocumentSearchResults = function (json) {
     return documents;
 };
 jlab.wmenu.doScreenSearch = function (q) {
-    var url = "https://accweb.acc.jlab.org/search/jmenu-cebaf/ScreenAction/_search",
+    var url = jlab.wmenu.searchUrl + "/ScreenAction/_search",
             data = {q: q, size: 10, from: 0};
 
     var promise = $.ajax({
@@ -112,7 +112,7 @@ jlab.wmenu.doScreenSearch = function (q) {
     return promise;
 };
 jlab.wmenu.doApplicationSearch = function (q) {
-    var url = "https://accweb.acc.jlab.org/search/jmenu-cebaf/AppAction/_search",
+    var url = jlab.wmenu.searchUrl + "/AppAction/_search",
             data = {q: q, size: 10, from: 0};
 
     var promise = $.ajax({
@@ -140,7 +140,7 @@ jlab.wmenu.doApplicationSearch = function (q) {
     return promise;
 };
 jlab.wmenu.doDocumentSearch = function (q) {
-    var url = "https://accweb.acc.jlab.org/search/jmenu-cebaf/WebAction/_search",
+    var url = jlab.wmenu.searchUrl + "/WebAction/_search",
             data = {q: q, size: 10, from: 0};
 
     var promise = $.ajax({

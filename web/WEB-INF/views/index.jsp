@@ -42,6 +42,7 @@
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/wmenu.js?v=${initParam.releaseNumber}"></script>
         <script type="text/javascript">
             jlab.wmenu.menuUrl = '${fn:escapeXml(menuUrl)}';
+            jlab.wmenu.searchUrl = '${fn:escapeXml(searchUrl)}';
         </script>        
     </body>
 </html>
