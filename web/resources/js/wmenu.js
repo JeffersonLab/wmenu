@@ -374,18 +374,21 @@ jlab.wmenu.loadMainMenu = function () {
     var url = jlab.wmenu.menuUrl + '/MainMenu',
             data = {definitions: 1},
     dataType = "json",
-            options = {url: url, type: 'GET', data: data, dataType: dataType};
+            options = {url: url, type: 'GET', data: data, dataType: dataType, cache: true};
 
     if (url.indexOf("/") !== 0) {
         dataType = "jsonp";
         options.dataType = dataType;
         options.jsonp = 'jsonp';
+        options.jsonpCallback = 'jsonp';
     }
 
     var promise = $.ajax(options);
 
     promise.done(function (json) {
+        /*console.time('Build Menu');*/
         jlab.wmenu.handleMainMenuResults(json);
+        /*console.timeEnd('Build Menu');*/
     });
     promise.error(function (xhr, textStatus) {
         var json;
