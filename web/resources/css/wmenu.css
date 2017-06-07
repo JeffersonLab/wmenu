@@ -13,19 +13,19 @@
     margin: 0.5em;
     font-size: 0.60em;
 }
-@media only screen and (min-width: 600px){
-            html { 
-                background-color: white;
-            }
-            .ui-mobile-viewport {
-                width: 600px !important;
-                margin: 0 auto !important;
-                position: relative !important;
-                overflow-y: scroll;
-            }
-            .ui-header-fixed,
-            .ui-footer-fixed {
-                width: 600px !important;
-                margin: 0 auto !important;
-            }
-        }
+@media only screen and (min-width: 600px) {
+    html { 
+        background-color: white;
+    }
+    .ui-mobile-viewport {
+        width: 600px !important;
+        margin: 0 auto !important;
+        position: relative !important;
+        overflow-y: scroll;
+    }
+    .ui-header-fixed,
+    .ui-footer-fixed {
+        width: 600px !important;
+        margin: 0 auto !important;
+    }
+}
