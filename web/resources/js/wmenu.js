@@ -311,9 +311,16 @@ jlab.wmenu.handleMainMenuResults = function (json) {
 
     /*We need MainMenu-page to be first page*/
     $("#search-page-root").insertAfter("#MainMenu-page");
+    
+    /*See if URL contains a specific menu in it*/
+    var u = $.mobile.path.parseUrl(window.location.href),
+            menuName = u.hash;
 
+    if (menuName.length > 0) {
+        $(":mobile-pagecontainer").pagecontainer("change", menuName);
+    }    
+    
     $.mobile.initializePage();
-    /*$(":mobile-pagecontainer").pagecontainer("change", "#MainMenu-page");*/
 };
 jlab.wmenu.addPage = function (menu) {
     var id = menu.id + '-page',
@@ -335,7 +342,7 @@ jlab.wmenu.addPage = function (menu) {
             if (this.type === 'menu') {
                 def = jlab.wmenu.menuDefs[this.id];
                 $section.append('<li class="jmenu-' + this.type + '"><a href="#' + this.id + '-page">' + def.label + '</a></li>');
-                jlab.wmenu.addPage(def);
+                /*jlab.wmenu.addPage(def);*/
             } else if (this.type === 'action') {
                 def = jlab.wmenu.actionDefs[this.id];
                 /*console.log(def);*/
@@ -407,11 +414,30 @@ jlab.wmenu.loadMainMenu = function () {
         alert('Unable to perform request: ' + message);
     });
     promise.always(function () {
-        $.mobile.loading("hide");        
+        $.mobile.loading("hide");
     });
 
     return promise;
 };
+jlab.wmenu.dynamicallyAddMenuPage = function (urlObj) {
+    var menuName = urlObj.hash,
+            id = menuName.substring(1, menuName.length - 5);
+    var def = jlab.wmenu.menuDefs[id];
+    if (def) {
+        jlab.wmenu.addPage(def);
+    }
+};
+$(document).on("pagebeforechange", function (e, data) {
+    if (typeof data.toPage === "string") {
+        var u = $.mobile.path.parseUrl(data.toPage),
+                menuName = u.hash,
+                $page = $(menuName);
+
+        if ($page.length === 0) {
+            jlab.wmenu.dynamicallyAddMenuPage(u, data.options);
+        }
+    }
+});
 $(document).on("keyup", "#search-input", function (e) {
     if (e.keyCode === 13) {
         $(":mobile-pagecontainer").pagecontainer("change", "#search-page-root");
@@ -428,11 +454,8 @@ $(document).on("pageshow", function () {
         $previousBtn.show();
     }
 });
-$(document).bind("mobileinit", function () {
-    $.mobile.autoInitialize = false;
-});
 $(function () {
     $("#header-panel").toolbar({theme: "a"});
     $("#footer-panel").toolbar({theme: "a"});
-    jlab.wmenu.loadMainMenu();
+    jlab.wmenu.loadMainMenu(); 
 });
