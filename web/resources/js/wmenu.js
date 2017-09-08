@@ -25,6 +25,7 @@ if (!String.prototype.stripQuotes) {
 }
 var jlab = jlab || {};
 jlab.wmenu = jlab.wmenu || {};
+jlab.wmenu.OTF_PATH = '/cs/opshome/edm/wedm/otf/';
 jlab.macroQueryString = function (macros) {
     var url = "",
             tokens = macros.split(",");
@@ -40,11 +41,14 @@ jlab.macroQueryString = function (macros) {
 };
 jlab.wmenu.handleScreenSearchResults = function (json) {
     var screens = [];
+    
+    /*console.log(json);*/
+    
     if (json.hits.total > 0) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
             if (record._type === 'ScreenAction') {
-                screens.push(jlab.wmenu.createScreenActionLi({label: record._source.label, value: record._source.screen.value, type: record._source.screen.type}));
+                screens.push(jlab.wmenu.createScreenActionLi({parentId: record._source.menuData.actionID, id: record._source.id, label: record._source.label, value: record._source.screen.value, type: record._source.screen.type}));
             } else {
                 console.log('wrong type while parsing screens: ' + record._type);
             }
@@ -292,7 +296,12 @@ jlab.wmenu.createScreenActionLi = function (record) {
         }
 
         li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
-    } else { /*record.type === 'otf'*/
+    } else if(record.type === 'otf') { /*search result otf only - regular otf translated to edl type by menu server*/
+        /*console.log(record);*/
+        var tokens = record.value.split(/\s+/),
+                url = '/wedm/screen?edl=' + jlab.wmenu.OTF_PATH + record.parentId + '/' + record.id; 
+        li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';        
+    } else { /*unknown*/
         li = '<li data-debug="' + record.type + '">' + record.label + '</li>';
     }
     return li;
