@@ -285,7 +285,9 @@ jlab.wmenu.createScreenActionLi = function (record) {
     var li;
 
     /*If value is exactly 'edmRun' without params then don't try to link*/
-    if (record.value.trim() !== 'edmRun' && (record.type === 'edl' || record.type === 'run')) {
+    /*Also type must be one of edl or run*/
+    /*Also don't link if type is run, but doesn't start with edmRun*/
+    if (record.value.trim() !== 'edmRun' && (record.type === 'edl' || record.type === 'run') && !(record.type === 'run' && record.value.indexOf("edmRun") !== 0)) {
         /*console.log(record);*/
         var tokens = record.value.split(/\s+/),
                 url = '/wedm/screen?edl=' + tokens[tokens.length - 1];
