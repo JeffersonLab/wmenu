@@ -48,7 +48,12 @@ jlab.wmenu.handleScreenSearchResults = function (json) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
             if (record._type === 'ScreenAction') {
-                screens.push(jlab.wmenu.createScreenActionLi({parentId: record._source.menuData.actionID, id: record._source.id, label: record._source.label, value: record._source.screen.value, type: record._source.screen.type}));
+                console.log(record);
+                var parentId = 0;
+                if(record._source.menuData) {
+                    parentId = record._source.menuData.actionID;
+                }
+                screens.push(jlab.wmenu.createScreenActionLi({parentId: parentId, id: record._source.id, label: record._source.label, value: record._source.screen.value, type: record._source.screen.type}));
             } else {
                 console.log('wrong type while parsing screens: ' + record._type);
             }
