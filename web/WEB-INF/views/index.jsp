@@ -35,6 +35,7 @@
             </div>
         </div>
         <div id="footer-panel" data-role="footer" data-position="fixed" data-theme="a">
+            <div id="contact">Contact: <a href="mailto:epicsweb@jlab.org?subject=epicsweb">epicsweb@jlab.org</a></div>
             <div id="version">Version: ${initParam.releaseNumber} (${initParam.releaseDate})</div> 
         </div>        
         <script type="text/javascript" src="/epics2web/resources/js/jquery-1.10.2.min.js"></script>
