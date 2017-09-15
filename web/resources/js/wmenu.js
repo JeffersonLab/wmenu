@@ -266,6 +266,9 @@ jlab.wmenu.createAppActionLi = function (record) {
     } else if (record.value.indexOf('firefox') === 0) {
         var url = record.value.substring('firefox'.length).trim().stripQuotes();
         li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
+    } else if(record.value.indexOf('jmenu') === 0) {
+        var url = "#" + record.value.substring('jmenu'.length).trim().stripQuotes() + "-page";
+        li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';        
     } else {
         li = '<li class="disabled-item">' + record.label + '</li>';
     }
