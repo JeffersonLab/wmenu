@@ -8,6 +8,11 @@
     margin: 0 0.5em;
     text-align: left;
 }
+h3 {
+    margin: 0;
+    font-size: 1em;
+    font-style: italic;
+}
 #version {
     float: right;
     margin: 0.5em;

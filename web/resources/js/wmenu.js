@@ -354,13 +354,19 @@ jlab.wmenu.addPage = function (menu) {
 
     $body.append($page);
     for (var i = 0; i < menu.sections.length; i++) {
-        var $section = $('<ul data-role="listview" data-inset="true" class="section"></ul>');
+        var section = menu.sections[i];
+        
+        if(section.heading) {
+            $content.append('<h3>' + section.heading + '</h3>');
+        }        
+        
+        var $sectionDiv = $('<ul data-role="listview" data-inset="true" class="section"></ul>');
 
-        $(menu.sections[i].items).each(function () {
+        $(section.items).each(function () {
             var def;
             if (this.type === 'menu') {
                 def = jlab.wmenu.menuDefs[this.id];
-                $section.append('<li class="jmenu-' + this.type + '"><a href="#' + this.id + '-page">' + def.label + '</a></li>');
+                $sectionDiv.append('<li class="jmenu-' + this.type + '"><a href="#' + this.id + '-page">' + def.label + '</a></li>');
                 /*jlab.wmenu.addPage(def);*/
             } else if (this.type === 'action') {
                 def = jlab.wmenu.actionDefs[this.id];
@@ -376,17 +382,17 @@ jlab.wmenu.addPage = function (menu) {
                 } else {
                     console.log('unknown action sub-type: ' + def.type);
                 }
-                $section.append(li);
+                $sectionDiv.append(li);
             } else if (this.type === 'menutext') {
-                $section.append('<li class="jmenu-' + this.type + '">' + this.text + '</li>');
+                $sectionDiv.append('<li class="jmenu-' + this.type + '">' + this.text + '</li>');
             } else {
                 console.log('unknown type: ' + this.type);
                 return true;
             }
         });
 
-        $content.append($section);
-        $section.listview().listview("refresh");
+        $content.append($sectionDiv);
+        $sectionDiv.listview().listview("refresh");
 
         if (i < menu.sections.length - 1) {
             $content.append('<div class="hr-container"><hr/></div>');
