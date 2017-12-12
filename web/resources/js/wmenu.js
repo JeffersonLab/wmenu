@@ -293,7 +293,7 @@ jlab.wmenu.createScreenActionLi = function (record) {
     if (record.value.trim() !== 'edmRun' && (record.type === 'edl' || record.type === 'run') && !(record.type === 'run' && record.value.indexOf("edmRun") !== 0)) {
         /*console.log(record);*/
         var tokens = record.value.split(/\s+/),
-                url = '/wedm/screen?edl=' + tokens[tokens.length - 1];
+                url = jlab.contextPrefix + '/wedm/screen?edl=' + tokens[tokens.length - 1];
         if (tokens.length > 1 && tokens[0].indexOf("edmRun") === 0 && tokens[1].indexOf("-m") === 0) {
             var macros = tokens[2];
             for (var j = 3; j < tokens.length - 1; j++) {
@@ -309,7 +309,7 @@ jlab.wmenu.createScreenActionLi = function (record) {
     } else if(record.type === 'otf') { /*search result otf only - regular otf translated to edl type by menu server*/
         /*console.log(record);*/
         var tokens = record.value.split(/\s+/),
-                url = '/wedm/screen?edl=' + jlab.wmenu.OTF_PATH + record.parentId + '/' + record.id; 
+                url = jlab.contextPrefix + '/wedm/screen?edl=' + jlab.wmenu.OTF_PATH + record.parentId + '/' + record.id; 
         li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';        
     } else { /*unknown*/
         li = '<li data-debug="' + record.type + '">' + record.label + '</li>';

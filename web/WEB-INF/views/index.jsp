@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib prefix="app" uri="http://jlab.org/app/functions"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -44,6 +45,7 @@
         <script type="text/javascript">
             jlab.wmenu.menuUrl = '${fn:escapeXml(menuUrl)}';
             jlab.wmenu.searchUrl = '${fn:escapeXml(searchUrl)}';
+            jlab.contextPrefix = '${app:contextPrefix()}';
         </script>        
     </body>
 </html>
