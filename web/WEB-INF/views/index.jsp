@@ -18,7 +18,7 @@
             <h1>WMenu</h1>
             <input id="search-input" type="search" placeholder="Search"/>
         </div>        
-        <div data-role="page" id="MainMenu-page">
+        <div data-role="page" id="${rootMenu}-page">
             <div data-role="header">
                 <h2></h2>
             </div>
@@ -45,6 +45,7 @@
         <script type="text/javascript">
             jlab.wmenu.menuUrl = '${fn:escapeXml(menuUrl)}';
             jlab.wmenu.searchUrl = '${fn:escapeXml(searchUrl)}';
+            jlab.wmenu.rootMenu = '${rootMenu}';
             jlab.contextPrefix = '${app:contextPrefix()}';
         </script>        
     </body>

@@ -268,6 +268,9 @@ jlab.wmenu.createAppActionLi = function (record) {
         li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
     } else if(record.value.indexOf('jmenu') === 0) {
         var url = "#" + record.value.substring('jmenu'.length).trim().stripQuotes() + "-page";
+        li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
+    } else if(record.value.indexOf('jmenu') > 0 && record.value.indexOf('MainMenuUITF') > 0) {
+        var url = "https://epicsweb.jlab.org/itf";        
         li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';        
     } else {
         li = '<li class="disabled-item">' + record.label + '</li>';
@@ -316,20 +319,20 @@ jlab.wmenu.createScreenActionLi = function (record) {
     }
     return li;
 };
-jlab.wmenu.handleMainMenuResults = function (json) {
+jlab.wmenu.handleRootMenuResults = function (json) {
     jlab.wmenu.menuDefs = json.data.menuDefs;
     jlab.wmenu.actionDefs = json.data.actionDefs;
     /*console.log(json);*/
 
-    var menu = {id: 'MainMenu', label: 'Main Menu', sections: json.data.sections};
+    var menu = {id: jlab.wmenu.rootMenu, label: 'Main Menu', sections: json.data.sections};
 
-    /*This isn't really the MainMenu-page, just a placeholder */
-    $("#MainMenu-page").remove();
+    /*This isn't really the root menu page, just a placeholder */
+    $("#" + jlab.wmenu.rootMenu + "-page").remove();
 
     jlab.wmenu.addPage(menu);
 
-    /*We need MainMenu-page to be first page*/
-    $("#search-page-root").insertAfter("#MainMenu-page");
+    /*We need root menu page to be first page*/
+    $("#search-page-root").insertAfter("#" + jlab.wmenu.rootMenu + "-page");
     
     /*See if URL contains a specific menu in it*/
     var u = $.mobile.path.parseUrl(window.location.href),
@@ -399,11 +402,11 @@ jlab.wmenu.addPage = function (menu) {
         }
     }
 };
-jlab.wmenu.loadMainMenu = function () {
+jlab.wmenu.loadRootMenu = function () {
 
     $.mobile.loading("show", {textVisible: true, theme: "b"});
 
-    var url = jlab.wmenu.menuUrl + '/MainMenu',
+    var url = jlab.wmenu.menuUrl + '/' + jlab.wmenu.rootMenu,
             data = {definitions: 1},
     dataType = "json",
             options = {url: url, type: 'GET', data: data, dataType: dataType, cache: true};
@@ -419,7 +422,7 @@ jlab.wmenu.loadMainMenu = function () {
 
     promise.done(function (json) {
         /*console.time('Build Menu');*/
-        jlab.wmenu.handleMainMenuResults(json);
+        jlab.wmenu.handleRootMenuResults(json);
         /*console.timeEnd('Build Menu');*/
     });
     promise.error(function (xhr, textStatus) {
@@ -473,7 +476,7 @@ $(document).on("pageshow", function () {
     var $page = $(".ui-page-active"),
             id = $page.attr("id"),
             $previousBtn = $("#previous-button");
-    if (id === 'MainMenu-page') {
+    if (id === jlab.wmenu.rootMenu + '-page') {
         $previousBtn.hide();
     } else {
         $previousBtn.show();
@@ -482,5 +485,5 @@ $(document).on("pageshow", function () {
 $(function () {
     $("#header-panel").toolbar({theme: "a"});
     $("#footer-panel").toolbar({theme: "a"});
-    jlab.wmenu.loadMainMenu(); 
+    jlab.wmenu.loadRootMenu(); 
 });

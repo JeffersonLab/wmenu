@@ -16,23 +16,32 @@ public class IndexController extends HttpServlet {
 
     public static final String JMENU_URL;
     public static final String SEARCH_URL;
+    public static final String ROOT_MENU;
     
     static {
-        String url = System.getenv("WMENU_JMENU_URL");
+        String prop = System.getenv("WMENU_JMENU_URL");
         
-        if(url == null) {
-            url = "/apps/jmenu/api/menus";
+        if(prop == null) {
+            prop = "/apps/jmenu/api/menus";
         }
         
-        JMENU_URL = url;
+        JMENU_URL = prop;
         
-        url = System.getenv("WMENU_SEARCH_URL");
+        prop = System.getenv("WMENU_SEARCH_URL");
         
-        if(url == null) {
-            url = "/search/jmenu-cebaf";
+        if(prop == null) {
+            prop = "/search/jmenu-cebaf";
         }
         
-        SEARCH_URL = url;        
+        SEARCH_URL = prop;    
+        
+        prop = System.getenv("WMENU_ROOT_MENU");
+        
+        if(prop == null) {
+            prop = "MainMenu";
+        }
+        
+        ROOT_MENU = prop;
     }    
     
     /**
@@ -49,6 +58,7 @@ public class IndexController extends HttpServlet {
         
         request.setAttribute("menuUrl", JMENU_URL);
         request.setAttribute("searchUrl", SEARCH_URL);
+        request.setAttribute("rootMenu", ROOT_MENU);
         
         request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
     }
