@@ -41,16 +41,16 @@ jlab.macroQueryString = function (macros) {
 };
 jlab.wmenu.handleScreenSearchResults = function (json) {
     var screens = [];
-    
+
     /*console.log(json);*/
-    
+
     if (json.hits.total > 0) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
             if (record._type === 'ScreenAction') {
                 console.log(record);
                 var parentId = 0;
-                if(record._source.menuData) {
+                if (record._source.menuData) {
                     parentId = record._source.menuData.actionID;
                 }
                 screens.push(jlab.wmenu.createScreenActionLi({parentId: parentId, id: record._source.id, label: record._source.label, value: record._source.screen.value, type: record._source.screen.type}));
@@ -266,12 +266,12 @@ jlab.wmenu.createAppActionLi = function (record) {
     } else if (record.value.indexOf('firefox') === 0) {
         var url = record.value.substring('firefox'.length).trim().stripQuotes();
         li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
-    } else if(record.value.indexOf('jmenu') === 0) {
+    } else if (record.value.indexOf('jmenu') === 0) {
         var url = "#" + record.value.substring('jmenu'.length).trim().stripQuotes() + "-page";
         li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
-    } else if(record.value.indexOf('jmenu') > 0 && record.value.indexOf('MainMenuUITF') > 0) {
-        var url = "https://epicsweb.jlab.org/itf";        
-        li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';        
+    } else if (record.value.indexOf('jmenu') > 0 && record.value.indexOf('MainMenuUITF') > 0) {
+        var url = "https://epicsweb.jlab.org/itf";
+        li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
     } else {
         li = '<li class="disabled-item">' + record.label + '</li>';
     }
@@ -309,11 +309,11 @@ jlab.wmenu.createScreenActionLi = function (record) {
         }
 
         li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
-    } else if(record.type === 'otf') { /*search result otf only - regular otf translated to edl type by menu server*/
+    } else if (record.type === 'otf') { /*search result otf only - regular otf translated to edl type by menu server*/
         /*console.log(record);*/
         var tokens = record.value.split(/\s+/),
-                url = jlab.contextPrefix + '/wedm/screen?edl=' + jlab.wmenu.OTF_PATH + record.parentId + '/' + record.id; 
-        li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';        
+                url = jlab.contextPrefix + '/wedm/screen?edl=' + jlab.wmenu.OTF_PATH + record.parentId + '/' + record.id;
+        li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
     } else { /*unknown*/
         li = '<li data-debug="' + record.type + '">' + record.label + '</li>';
     }
@@ -324,7 +324,8 @@ jlab.wmenu.handleRootMenuResults = function (json) {
     jlab.wmenu.actionDefs = json.data.actionDefs;
     /*console.log(json);*/
 
-    var menu = {id: jlab.wmenu.rootMenu, label: 'Main Menu', sections: json.data.sections};
+    var heading = json.data.heading || json.data.label || 'Main Menu',
+            menu = {id: jlab.wmenu.rootMenu, label: heading, sections: json.data.sections};
 
     /*This isn't really the root menu page, just a placeholder */
     $("#" + jlab.wmenu.rootMenu + "-page").remove();
@@ -333,20 +334,21 @@ jlab.wmenu.handleRootMenuResults = function (json) {
 
     /*We need root menu page to be first page*/
     $("#search-page-root").insertAfter("#" + jlab.wmenu.rootMenu + "-page");
-    
+
     /*See if URL contains a specific menu in it*/
     var u = $.mobile.path.parseUrl(window.location.href),
             menuName = u.hash;
 
     if (menuName.length > 0) {
         $(":mobile-pagecontainer").pagecontainer("change", menuName);
-    }    
-    
+    }
+
     $.mobile.initializePage();
 };
 jlab.wmenu.addPage = function (menu) {
     var id = menu.id + '-page',
-            $page = $('<div id="' + id + '" data-role="page"><div data-role="header"><h2>' + menu.label + '</h2></div><div role="main" class="ui-content"></div></div>'),
+            heading = menu.heading || menu.label || '',
+            $page = $('<div id="' + id + '" data-role="page"><div data-role="header"><h2>' + heading + '</h2></div><div role="main" class="ui-content"></div></div>'),
             $body = $("body"),
             $content = $page.find(".ui-content");
 
@@ -358,11 +360,11 @@ jlab.wmenu.addPage = function (menu) {
     $body.append($page);
     for (var i = 0; i < menu.sections.length; i++) {
         var section = menu.sections[i];
-        
-        if(section.heading) {
+
+        if (section.heading) {
             $content.append('<h3>' + section.heading + '</h3>');
-        }        
-        
+        }
+
         var $sectionDiv = $('<ul data-role="listview" data-inset="true" class="section"></ul>');
 
         $(section.items).each(function () {
@@ -408,7 +410,7 @@ jlab.wmenu.loadRootMenu = function () {
 
     var url = jlab.wmenu.menuUrl + '/' + jlab.wmenu.rootMenu,
             data = {definitions: 1},
-    dataType = "json",
+            dataType = "json",
             options = {url: url, type: 'GET', data: data, dataType: dataType, cache: true};
 
     if (url.indexOf("/") !== 0) {
@@ -485,5 +487,5 @@ $(document).on("pageshow", function () {
 $(function () {
     $("#header-panel").toolbar({theme: "a"});
     $("#footer-panel").toolbar({theme: "a"});
-    jlab.wmenu.loadRootMenu(); 
+    jlab.wmenu.loadRootMenu();
 });
