@@ -39,7 +39,7 @@
             <div id="contact">Contact: <a href="mailto:epicsweb@jlab.org?subject=epicsweb">epicsweb@jlab.org</a></div>
             <div id="version">Version: ${initParam.releaseNumber} (${initParam.releaseDate})</div> 
         </div>        
-        <script type="text/javascript" src="/epics2web/resources/js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="${app:contextPrefix()}/epics2web/resources/js/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.mobile-1.4.5.min.js"></script>  
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/wmenu.js?v=${initParam.releaseNumber}"></script>      
         <script type="text/javascript">
