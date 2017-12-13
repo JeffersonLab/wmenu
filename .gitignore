@@ -3,3 +3,4 @@
 /build/
 /nbbuild.xml
 /dist/
+/web/META-INF/context.xml
