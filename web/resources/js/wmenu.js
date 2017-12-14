@@ -269,9 +269,17 @@ jlab.wmenu.createAppActionLi = function (record) {
     } else if (record.value.indexOf('jmenu') === 0) {
         var url = "#" + record.value.substring('jmenu'.length).trim().stripQuotes() + "-page";
         li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
-    } else if (record.value.indexOf('jmenu') > 0 && record.value.indexOf('MainMenuUITF') > 0) {
-        var url = "https://epicsweb.jlab.org/itf/wmenu/";
-        li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
+    } else if (record.value.indexOf('jmenu') > 0) {
+        if (record.value.indexOf('MainMenuUITF') > 0) {
+            var url = "https://epicsweb.jlab.org/itf/wmenu/";
+            li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
+        } else if (record.value.indexOf('MainMenuCHL') > 0) {
+            var url = "https://epicsweb.jlab.org/chl/wmenu/";
+            li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
+        } else {
+            var url = "https://epicsweb.jlab.org/wmenu/";
+            li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
+        }
     } else {
         li = '<li class="disabled-item">' + record.label + '</li>';
     }
