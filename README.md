@@ -5,7 +5,8 @@ Web version of JMenu
 
 ## Configure
 
-Two environment variables are used to determine URL to web services:
+Environment variables are needed:
 
-1. WMENU_JMENU_URL - path to menus
-1. WMENU_SEARCh_URL  - path to search results
+1. WMENU_JMENU_URL - path to menus web service
+1. WMENU_SEARCH_URL  - path to search results web service
+1. WMENU_ROOT_MENU - name of root menu (example 'MainMenu' for ops, 'MainMenuUITF' for itf)
