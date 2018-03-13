@@ -276,6 +276,9 @@ jlab.wmenu.createAppActionLi = function (record) {
         } else if (record.value.indexOf('MainMenuCHL') > 0) {
             var url = "https://epicsweb.jlab.org/chl/wmenu/";
             li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
+        } else if (record.value.indexOf('MainMenuSRF') > 0) {
+            var url = "https://epicsweb.jlab.org/srf/wmenu/";
+            li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';            
         } else {
             var url = "https://epicsweb.jlab.org/wmenu/";
             li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
