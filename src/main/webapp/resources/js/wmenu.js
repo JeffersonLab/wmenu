@@ -466,6 +466,8 @@ jlab.wmenu.dynamicallyAddMenuPage = function (urlObj) {
     var def = jlab.wmenu.menuDefs[id];
     if (def) {
         jlab.wmenu.addPage(def);
+    } else {
+        console.log('Submenu missing from root menu cache: ' + id);
     }
 };
 $(document).on("pagebeforechange", function (e, data) {
