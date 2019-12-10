@@ -1,6 +1,4 @@
-/nbproject/
-/nb-build.xml
-/build/
-/nbbuild.xml
-/dist/
-/web/META-INF/context.xml
+/out
+/build
+/.idea
+/.gradle
