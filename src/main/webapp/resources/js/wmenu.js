@@ -278,7 +278,10 @@ jlab.wmenu.createAppActionLi = function (record) {
             li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
         } else if (record.value.indexOf('MainMenuSRF') > 0) {
             var url = "https://epicsweb.jlab.org/srf/wmenu/";
-            li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';            
+            li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
+        } else if (record.value.indexOf('fell00') > 0) {
+            var url = "https://epicsweb.jlab.org/fel/wmenu/";
+            li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
         } else {
             var url = "https://epicsweb.jlab.org/wmenu/";
             li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
