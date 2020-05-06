@@ -309,7 +309,7 @@ jlab.wmenu.createScreenActionLi = function (record) {
     /*Also don't link if type is run, but doesn't start with edmRun*/
     if (record.value.trim() !== 'edmRun' && (record.type === 'edl' || record.type === 'run') && !(record.type === 'run' && record.value.indexOf("edmRun") !== 0)) {
         /*console.log(record);*/
-        var tokens = record.value.split(/\s+/),
+        var tokens = record.value.trim().split(/\s+/),
                 url = jlab.contextPrefix + '/wedm/screen?edl=' + tokens[tokens.length - 1];
         if (tokens.length > 1 && tokens[0].indexOf("edmRun") === 0 && tokens[1].indexOf("-m") === 0) {
             var macros = tokens[2];
