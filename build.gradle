@@ -10,16 +10,11 @@ ext {
     releaseDate = 'May 06 2020'
 }
 
-compileJava   {
-    options.compilerArgs += ["-Xlint:deprecation", "-Xlint:unchecked"]
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
+tasks.withType(JavaCompile) {
+    options.release = 8
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
-
-compileTestJava {
-    options.compilerArgs += ["-Xlint:deprecation", "-Xlint:unchecked"]
-}
-
 
 repositories {
     mavenCentral()
