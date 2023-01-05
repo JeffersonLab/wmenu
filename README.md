@@ -8,6 +8,7 @@ Web version of JMenu
 - [Configure](https://github.com/JeffersonLab/wmenu#configure)
 - [Build](https://github.com/JeffersonLab/wmenu#build) 
 - [Release](https://github.com/JeffersonLab/wmenu#release) 
+- [See Also](https://github.com/JeffersonLab/wmenu#see-also) 
 ---
 
 ## Install
@@ -35,3 +36,11 @@ gradlew build
 **Note**: If you do not already have Gradle installed, it will be installed automatically by the wrapper script included in the source
 
 **Note for JLab On-Site Users**: Jefferson Lab has an intercepting [proxy](https://gist.github.com/slominskir/92c25a033db93a90184a5994e71d0b78)
+
+## Release
+1. Bump the version number and release date in build.gradle and commit and push to GitHub (using [Semantic Versioning](https://semver.org/)).   
+2. Create a new release on the GitHub [Releases](https://github.com/JeffersonLab/wedm/releases) page corresponding to same version in build.gradle (Enumerate changes and link issues).   Run war Gradle build target and attach war to release.
+
+## See Also
+
+  - [wedm](https://github.com/JeffersonLab/wedm)   
