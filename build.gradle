@@ -22,22 +22,22 @@ compileTestJava {
 
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-  	compile 'org.glassfish:javax.json:1.0.4'
-    compile 'javax.servlet:jstl:1.2'
-    providedCompile 'javax.json:javax.json-api:1.1.4'
-	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
-  	testCompile group: 'junit', name: 'junit', version: '4.12'
+  	implementation 'org.glassfish:javax.json:1.0.4',
+                   'javax.servlet:jstl:1.2'
+    providedCompile 'javax.json:javax.json-api:1.1.4',
+                    'javax.servlet:javax.servlet-api:3.1.0'
+  	testImplementation 'junit:junit:4.12'
 }
 
 war {
-    archiveName 'wmenu.war' // Otherwise defaults to having version attached which is pain to re-deploy on version upgrade
+    archiveFileName = 'wmenu.war'
     filesMatching('WEB-INF/web.xml') {
         filter {
-            String line -> line.replaceAll("@VERSION@", version)
+            String line -> line.replaceAll("@VERSION@", project.version)
         }
         filter {
             String line -> line.replaceAll("@RELEASE_DATE@", releaseDate)
