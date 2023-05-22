@@ -38,8 +38,16 @@
         <div id="footer-panel" data-role="footer" data-position="fixed" data-theme="a">
             <div id="contact">Contact: <a href="mailto:epicsweb@jlab.org?subject=epicsweb">epicsweb@jlab.org</a></div>
             <div id="version">Version: ${initParam.releaseNumber} (${initParam.releaseDate})</div> 
-        </div>        
-        <script type="text/javascript" src="${app:contextPrefix()}/epics2web/resources/js/jquery-1.10.2.min.js"></script>
+        </div>
+        <c:set var="resourceLocation" value="${env['RESOURCE_LOCATION']}"/>
+        <c:choose>
+            <c:when test="${'CDN' eq resourceLocation}">
+                <script src="${cdnContextPath}/jquery/1.10.2.min.js"></script>
+            </c:when>
+            <c:otherwise><!-- LOCAL -->
+                <script src="${pageContext.request.contextPath}/resources/js/jquery-1.10.2.min.js"></script>
+            </c:otherwise>
+        </c:choose>
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.mobile-1.4.5.min.js"></script>  
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/wmenu.js?v=${initParam.releaseNumber}"></script>      
         <script type="text/javascript">
