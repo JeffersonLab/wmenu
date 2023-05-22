@@ -44,18 +44,18 @@ jlab.wmenu.handleScreenSearchResults = function (json) {
 
     /*console.log(json);*/
 
-    if (json.hits.total > 0) {
+    if (json.hits.total.value > 0) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
-            if (record._type === 'ScreenAction') {
-                console.log(record);
+            if (record.fields.type[0] === 'ScreenAction') {
+                /*console.log(record);*/
                 var parentId = 0;
-                if (record._source.menuData) {
-                    parentId = record._source.menuData.actionID;
+                if (record.fields['menuData.actionID']) {
+                    parentId = record.fields['menuData.actionID'][0];
                 }
-                screens.push(jlab.wmenu.createScreenActionLi({parentId: parentId, id: record._source.id, label: record._source.label, value: record._source.screen.value, type: record._source.screen.type}));
+                screens.push(jlab.wmenu.createScreenActionLi({parentId: parentId, id: record.fields.id[0], label: record.fields.label[0], value: record.fields['screen.value'][0], type: record.fields['screen.type'][0]}));
             } else {
-                console.log('wrong type while parsing screens: ' + record._type);
+                console.log('wrong type while parsing screens: ' + record.fields.type[0]);
             }
         }
     }
@@ -64,13 +64,17 @@ jlab.wmenu.handleScreenSearchResults = function (json) {
 };
 jlab.wmenu.handleApplicationSearchResults = function (json) {
     var applications = [];
-    if (json.hits.total > 0) {
+
+    /*console.log(json);*/
+
+    if (json.hits.total.value > 0) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
-            if (record._type === 'AppAction') {
-                applications.push(jlab.wmenu.createAppActionLi({label: record._source.label, value: record._source.app.value}));
+            if (record.fields.type[0] === 'AppAction') {
+                /*console.log(record);*/
+                applications.push(jlab.wmenu.createAppActionLi({label: record.fields.label[0], value: record.fields['app.value'][0]}));
             } else {
-                console.log('wrong type for applications: ' + record._type);
+                console.log('wrong type for applications: ' + record.fields.type[0]);
             }
         }
     }
@@ -79,13 +83,17 @@ jlab.wmenu.handleApplicationSearchResults = function (json) {
 };
 jlab.wmenu.handleDocumentSearchResults = function (json) {
     var documents = [];
-    if (json.hits.total > 0) {
+
+    /*console.log(json);*/
+
+    if (json.hits.total.value > 0) {
         for (var i = 0; i < json.hits.hits.length; i++) {
             var record = json.hits.hits[i];
-            if (record._type === 'WebAction') {
-                documents.push(jlab.wmenu.createWebActionLi({label: record._source.label, value: record._source.doc.value}));
+            if (record.fields.type[0] === 'WebAction') {
+                /*console.log(record);*/
+                documents.push(jlab.wmenu.createWebActionLi({label: record.fields.label[0], value: record.fields['doc.value']}));
             } else {
-                console.log('wrong type for document: ' + record._type);
+                console.log('wrong type for document: ' + record.fields.type[0]);
             }
         }
     }
@@ -93,14 +101,47 @@ jlab.wmenu.handleDocumentSearchResults = function (json) {
     return documents;
 };
 jlab.wmenu.doScreenSearch = function (q) {
-    var url = jlab.wmenu.searchUrl + "/ScreenAction/_search",
-            data = {q: q, size: 10, from: 0};
+    var url = jlab.wmenu.searchUrl + "/_search",
+            data = {
+                    size: 10,
+                    query: {
+                        bool: {
+                            must: [
+                                {
+                                    simple_query_string: {
+                                        query: q,
+                                        fields: [
+                                            '*',
+                                            'label^10',
+                                            'menuData.headings^2',
+                                            'menuData.labels^3',
+                                            'menuData.menu_labels^5',
+                                            'edlData.keywords^10',
+                                            'edlData.elements^3'
+                                        ],
+                                        default_operator: 'AND'
+                                    }
+                                },
+                                {
+                                    match: {
+                                        type: "ScreenAction"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    fields: [
+                        'id', 'type', 'label', 'menuData.actionID', 'screen.value', 'screen.type'
+                    ],
+                    _source: false
+                };
 
     var promise = $.ajax({
         url: url,
-        type: "GET",
-        data: data,
-        dataType: "json"
+        type: "POST",
+        data: JSON.stringify(data),
+        dataType: "json",
+        contentType: "application/json"
     });
     promise.done(function (json) {
         jlab.wmenu.handleScreenSearchResults(json);
@@ -121,14 +162,47 @@ jlab.wmenu.doScreenSearch = function (q) {
     return promise;
 };
 jlab.wmenu.doApplicationSearch = function (q) {
-    var url = jlab.wmenu.searchUrl + "/AppAction/_search",
-            data = {q: q, size: 10, from: 0};
+    var url = jlab.wmenu.searchUrl + "/_search",
+        data = {
+            size: 10,
+            query: {
+                bool: {
+                    must: [
+                        {
+                            simple_query_string: {
+                                query: q,
+                                fields: [
+                                    '*',
+                                    'label^10',
+                                    'menuData.headings^2',
+                                    'menuData.labels^3',
+                                    'menuData.menu_labels^5',
+                                    'edlData.keywords^10',
+                                    'edlData.elements^3'
+                                ],
+                                default_operator: 'AND'
+                            }
+                        },
+                        {
+                            match: {
+                                type: "AppAction"
+                            }
+                        }
+                    ]
+                }
+            },
+            fields: [
+                'id', 'type', 'label', 'app.value'
+            ],
+            _source: false
+        };
 
     var promise = $.ajax({
         url: url,
-        type: "GET",
-        data: data,
-        dataType: "json"
+        type: "POST",
+        data: JSON.stringify(data),
+        dataType: "json",
+        contentType: "application/json"
     });
     promise.done(function (json) {
         jlab.wmenu.handleApplicationSearchResults(json);
@@ -149,14 +223,47 @@ jlab.wmenu.doApplicationSearch = function (q) {
     return promise;
 };
 jlab.wmenu.doDocumentSearch = function (q) {
-    var url = jlab.wmenu.searchUrl + "/WebAction/_search",
-            data = {q: q, size: 10, from: 0};
+    var url = jlab.wmenu.searchUrl + "/_search",
+        data = {
+            size: 10,
+            query: {
+                bool: {
+                    must: [
+                        {
+                            simple_query_string: {
+                                query: q,
+                                fields: [
+                                    '*',
+                                    'label^10',
+                                    'menuData.headings^2',
+                                    'menuData.labels^3',
+                                    'menuData.menu_labels^5',
+                                    'edlData.keywords^10',
+                                    'edlData.elements^3'
+                                ],
+                                default_operator: 'AND'
+                            }
+                        },
+                        {
+                            match: {
+                                type: "WebAction"
+                            }
+                        }
+                    ]
+                }
+            },
+            fields: [
+                'id', 'type', 'label', 'doc.value'
+            ],
+            _source: false
+        };
 
     var promise = $.ajax({
         url: url,
-        type: "GET",
-        data: data,
-        dataType: "json"
+        type: "POST",
+        data: JSON.stringify(data),
+        dataType: "json",
+        contentType: "application/json"
     });
     promise.done(function (json) {
         jlab.wmenu.handleDocumentSearchResults(json);
