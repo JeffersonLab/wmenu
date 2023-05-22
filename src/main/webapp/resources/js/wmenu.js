@@ -534,13 +534,6 @@ jlab.wmenu.loadRootMenu = function () {
             dataType = "json",
             options = {url: url, type: 'GET', data: data, dataType: dataType, cache: true};
 
-    if (url.indexOf("/") !== 0) {
-        dataType = "jsonp";
-        options.dataType = dataType;
-        options.jsonp = 'jsonp';
-        options.jsonpCallback = 'jsonp';
-    }
-
     var promise = $.ajax(options);
 
     promise.done(function (json) {
