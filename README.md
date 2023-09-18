@@ -6,8 +6,10 @@ Web version of JMenu
 ---
 - [Install](https://github.com/JeffersonLab/wmenu#install)
 - [Configure](https://github.com/JeffersonLab/wmenu#configure)
-- [Build](https://github.com/JeffersonLab/wmenu#build) 
-- [Release](https://github.com/JeffersonLab/wmenu#release) 
+- [Build](https://github.com/JeffersonLab/wmenu#build)
+- [Develop](https://github.com/JeffersonLab/wmenu#develop)    
+- [Release](https://github.com/JeffersonLab/wmenu#release)
+- [Deploy](https://github.com/JeffersonLab/wmenu#deploy) 
 - [See Also](https://github.com/JeffersonLab/wmenu#see-also) 
 ---
 
@@ -37,9 +39,32 @@ gradlew build
 
 **Note for JLab On-Site Users**: Jefferson Lab has an intercepting [proxy](https://gist.github.com/slominskir/92c25a033db93a90184a5994e71d0b78)
 
+## Develop
+This application requires a menu server and Elasetic Search server.  On-site at JLab [configure](https://github.com/JeffersonLab/wmenu#configure) the app to use:
+
+```
+WMENU_JMENU_URL=https://accweb9.acc.jlab.org/apps/jmenu/api/menus
+WMENU_SEARCH_URL=https://accweb7.acc.jlab.org/search/jmenu-cebaf
+WMENU_ROOT_MENU=MainMenu
+```
+
+**Note**: These servers support CORS to allow cross-origin requests.
+
 ## Release
 1. Bump the version number and release date in build.gradle and commit and push to GitHub (using [Semantic Versioning](https://semver.org/)).   
 2. Create a new release on the GitHub [Releases](https://github.com/JeffersonLab/wedm/releases) page corresponding to same version in build.gradle (Enumerate changes and link issues).   Run war Gradle build target and attach war to release.
+
+## Deploy
+At JLab this app is found at [epicsweb.jlab.org/wmenu](https://epicsweb.jlab.org/wmenu/) and internally at [epicswebtest.acc.jlab.org/wmenu](https://epicswebtest.acc.jlab.org/wmenu/).  However, those servers are proxies for `tomcat1.acc.jlab.org` and `tomcattest1.acc.jlab.org` respectively.   Use wget or the like to grab the release war file.  Don't download directly into webapps dir as file scanner may attempt to deploy before fully downloaded.  Be careful of previous war file as by default wget won't overrwite.  The war file should be attached to each release, so right click it and copy location (or just update version in path provided in the example below).  Example:
+
+```
+cd /tmp
+rm wmenu.war
+wget https://github.com/JeffersonLab/wmenu/releases/download/v1.2.3/wmenu.war
+mv  wmenu.war /opt/tomcat/webapps
+```
+
+**JLab Internal Docs**:  [InstallGuideTomcatRHEL9](https://accwiki.acc.jlab.org/do/view/SysAdmin/InstallGuideTomcatRHEL9)
 
 ## See Also
 
