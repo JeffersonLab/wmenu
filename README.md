@@ -55,16 +55,14 @@ WMENU_ROOT_MENU=MainMenu
 2. Create a new release on the GitHub [Releases](https://github.com/JeffersonLab/wedm/releases) page corresponding to same version in build.gradle (Enumerate changes and link issues).   Run war Gradle build target and attach war to release.
 
 ## Deploy
-At JLab this app is found at [epicsweb.jlab.org/wmenu](https://epicsweb.jlab.org/wmenu/) and internally at [epicswebtest.acc.jlab.org/wmenu](https://epicswebtest.acc.jlab.org/wmenu/).  However, those servers are proxies for `tomcat1.acc.jlab.org` and `tomcattest1.acc.jlab.org` respectively.   Use wget or the like to grab the release war file.  Don't download directly into webapps dir as file scanner may attempt to deploy before fully downloaded.  Be careful of previous war file as by default wget won't overrwite.  The war file should be attached to each release, so right click it and copy location (or just update version in path provided in the example below).  Example:
+At JLab this app is found at [epicsweb.jlab.org/wmenu](https://epicsweb.jlab.org/wmenu/), plus fiefdom specific subpaths, and internally at [epicswebtest.acc.jlab.org/wmenu](https://epicswebtest.acc.jlab.org/wmenu/).  However, the epicsweb server is a proxy for `epicswebops.acc.jlab.org`, and fiefdom specific instances `epicswebchl.acc.jlab.org`, `epicswebfel.acc.jlab.org`, `epicswebsrf.acc.jlab.org` and `epicswebitf.acc.jlab.org`.   Use wget or the like to grab the release war file.  Don't download directly into webapps dir as file scanner may attempt to deploy before fully downloaded.  Be careful of previous war file as by default wget won't overrwite.  The war file should be attached to each release, so right click it and copy location (or just update version in path provided in the example below).  Example:
 
 ```
 cd /tmp
 rm wmenu.war
 wget https://github.com/JeffersonLab/wmenu/releases/download/v1.2.3/wmenu.war
-mv  wmenu.war /opt/tomcat/webapps
+mv  wmenu.war /usr/share/tomcat/webapps
 ```
-
-**JLab Internal Docs**:  [InstallGuideTomcatRHEL9](https://accwiki.acc.jlab.org/do/view/SysAdmin/InstallGuideTomcatRHEL9)
 
 ## See Also
 
