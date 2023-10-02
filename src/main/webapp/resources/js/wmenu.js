@@ -499,7 +499,7 @@ jlab.wmenu.addPage = function (menu) {
                 /*console.log(def);*/
                 var li;
                 if (def.type === 'AppAction') {
-                    li = jlab.wmenu.createAppActionLi({label: def.label, value: def.action.app});
+                    li = jlab.wmenu.createAppActionLi({label: this.label || def.label, value: def.action.app});
                 } else if (def.type === 'WebAction') {
                     li = jlab.wmenu.createWebActionLi({label: def.label, value: def.action.doc});
                 } else if (def.type === 'ScreenAction') {
