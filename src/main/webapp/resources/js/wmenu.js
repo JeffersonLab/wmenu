@@ -501,10 +501,10 @@ jlab.wmenu.addPage = function (menu) {
                 if (def.type === 'AppAction') {
                     li = jlab.wmenu.createAppActionLi({label: this.label || def.label, value: def.action.app});
                 } else if (def.type === 'WebAction') {
-                    li = jlab.wmenu.createWebActionLi({label: def.label, value: def.action.doc});
+                    li = jlab.wmenu.createWebActionLi({label: this.label || def.label, value: def.action.doc});
                 } else if (def.type === 'ScreenAction') {
                     /*console.log(def);*/
-                    li = jlab.wmenu.createScreenActionLi({label: def.label, value: def.action.screen, type: def.action.type});
+                    li = jlab.wmenu.createScreenActionLi({label: this.label || def.label, value: def.action.screen, type: def.action.type});
                 } else {
                     console.log('unknown action sub-type: ' + def.type);
                 }
