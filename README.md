@@ -55,13 +55,14 @@ WMENU_ROOT_MENU=MainMenu
 2. Create a new release on the GitHub [Releases](https://github.com/JeffersonLab/wedm/releases) page corresponding to same version in build.gradle (Enumerate changes and link issues).   Run war Gradle build target and attach war to release.
 
 ## Deploy
-At JLab this app is found at [epicsweb.jlab.org/wmenu](https://epicsweb.jlab.org/wmenu/), plus other fiefdom specific subpaths, and internally at [epicswebtest.acc.jlab.org/wmenu](https://epicswebtest.acc.jlab.org/wmenu/).  However, the epicsweb server is a proxy for `epicswebops.acc.jlab.org`, `epicswebchl.acc.jlab.org`, `epicswebfel.acc.jlab.org`, `epicswebsrf.acc.jlab.org` and `epicswebitf.acc.jlab.org`.   Use wget or the like to grab the release war file.  Don't download directly into webapps dir as file scanner may attempt to deploy before fully downloaded.  Be careful of previous war file as by default wget won't overrwite.  The war file should be attached to each release, so right click it and copy location (or just update version in path provided in the example below).  Example:
+At JLab this app is found at [epicsweb.jlab.org/wmenu](https://epicsweb.jlab.org/wmenu/), plus other fiefdom specific subpaths, and internally at [epicswebtest.acc.jlab.org/wmenu](https://epicswebtest.acc.jlab.org/wmenu/).  However, the epicsweb server is a proxy for `epicswebops.acc.jlab.org`, `epicswebchl.acc.jlab.org`, `epicswebfel.acc.jlab.org`, `epicswebsrf.acc.jlab.org` and `epicswebitf.acc.jlab.org`.  Additionally, the context root for each is adjusted with a suffix such that all servers can be reached from a single namespace.  The context root suffixes are `/`, `/chl`, `/fel`, `/srf`, and `/itf` respectively.  Tomcat interprets context roots from _war_ file name unless overridden elsewhere.  Therefore each _war_ must be renamed with `#<suffix>`.    Use wget or the like to grab the release war file.  Don't download directly into webapps dir as file scanner may attempt to deploy before fully downloaded.  Be careful of previous war file as by default wget won't overrwite.  The war file should be attached to each release, so right click it and copy location (or just update version in path provided in the example below).  Example for chl fiefdom:
 
 ```
 cd /tmp
 rm wmenu.war
 wget https://github.com/JeffersonLab/wmenu/releases/download/v1.2.3/wmenu.war
-mv  wmenu.war /usr/share/tomcat/webapps
+mv wmenu.war wmenu#chl.war
+mv  wmenu#chl.war /usr/share/tomcat/webapps
 ```
 
 ## See Also
