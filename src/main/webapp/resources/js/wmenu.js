@@ -25,7 +25,7 @@ if (!String.prototype.stripQuotes) {
 }
 var jlab = jlab || {};
 jlab.wmenu = jlab.wmenu || {};
-jlab.wmenu.OTF_PATH = '/cs/opshome/edm/wedm/otf/';
+jlab.wmenu.OTF_PATH = '/cs/opshome/edm/wedm/otf-pregen/';
 jlab.macroQueryString = function (macros) {
     var url = "",
             tokens = macros.split(",");
@@ -430,10 +430,23 @@ jlab.wmenu.createScreenActionLi = function (record) {
         }
 
         li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
-    } else if (record.type === 'otf') { /*search result otf only - regular otf translated to edl type by menu server*/
+    } else if (record.type === 'otf') {
         /*console.log(record);*/
-        var tokens = record.value.split(/\s+/),
-                url = jlab.contextPrefix + '/wedm/screen?edl=' + jlab.wmenu.OTF_PATH + record.parentId + '/' + record.id;
+        // Step 1
+        var filename = record.value.trim();
+
+        // Step 2
+        filename = btoa(filename); // Note: doesn't handle Unicode
+
+        // Step 3
+        if(filename.length > 251) {
+            filename = filename.substring(0, 251);
+        }
+
+        // Step 4
+        filename = filename + '.edl';
+
+        var url = jlab.contextPrefix + '/wedm/screen?edl=' + jlab.wmenu.OTF_PATH + filename;
         li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
     } else { /*unknown*/
         li = '<li data-debug="' + record.type + '">' + record.label + '</li>';
