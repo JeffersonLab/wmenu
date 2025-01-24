@@ -386,7 +386,7 @@ jlab.wmenu.createAppActionLi = function (record) {
         } else if (record.value.indexOf('MainMenuSRF') > 0) {
             var url = "https://epicsweb.jlab.org/srf/wmenu/";
             li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
-        } else if (record.value.indexOf('fell00') > 0) {
+        } else if (record.value.indexOf('MainMenuLERF') > 0) {
             var url = "https://epicsweb.jlab.org/fel/wmenu/";
             li = '<li><a rel="external" href="' + url + '">' + record.label + '</a></li>';
         } else {
