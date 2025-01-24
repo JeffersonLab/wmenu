@@ -1,4 +1,4 @@
-# wmenu [![CI](https://github.com/JeffersonLab/wmenu/actions/workflows/ci.yml/badge.svg)](https://github.com/JeffersonLab/wmenu/actions/workflows/ci.yml)
+# wmenu [![CI](https://github.com/JeffersonLab/wmenu/actions/workflows/ci.yaml/badge.svg)](https://github.com/JeffersonLab/wmenu/actions/workflows/ci.yaml)
 Web version of JMenu
 
 ![Menu Search](/doc/img/MainMenu.png)
