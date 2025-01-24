@@ -4,11 +4,9 @@ plugins {
 }
 
 description = "Web-based JMenu"
-version = '1.5.0'
-
-ext {
-    releaseDate = 'Nov 1 2023'
-}
+group 'org.jlab'
+version new File("./VERSION").text
+ext.releaseDate = new Date().format('MMM dd yyyy')
 
 tasks.withType(JavaCompile) {
     options.release = 8
