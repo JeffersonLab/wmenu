@@ -40,7 +40,7 @@ gradlew build
 **Note for JLab On-Site Users**: Jefferson Lab has an intercepting [proxy](https://gist.github.com/slominskir/92c25a033db93a90184a5994e71d0b78)
 
 ## Develop
-This application requires a menu server and Elasetic Search server.  On-site at JLab [configure](https://github.com/JeffersonLab/wmenu#configure) the app to use:
+This application requires a menu server and ElasticSearch server.  On-site at JLab [configure](https://github.com/JeffersonLab/wmenu#configure) the app to use:
 
 ```
 WMENU_JMENU_URL=https://accweb9.acc.jlab.org/apps/jmenu/api/menus
