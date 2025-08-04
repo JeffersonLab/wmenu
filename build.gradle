@@ -4,12 +4,13 @@ plugins {
 }
 
 description = "Web-based JMenu"
-group 'org.jlab'
-version new File("./VERSION").text
+group = 'org.jlab'
+version = new File("./VERSION").text
 ext.releaseDate = new Date().format('MMM dd yyyy')
+ext.version = project.version
 
-tasks.withType(JavaCompile) {
-    options.release = 8
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
     options.encoding = 'UTF-8'
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
@@ -30,7 +31,7 @@ war {
     archiveFileName = 'wmenu.war'
     filesMatching('WEB-INF/web.xml') {
         filter {
-            String line -> line.replaceAll("@VERSION@", project.version)
+            String line -> line.replaceAll("@VERSION@", version)
         }
         filter {
             String line -> line.replaceAll("@RELEASE_DATE@", releaseDate)
