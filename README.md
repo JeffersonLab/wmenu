@@ -28,7 +28,7 @@ Environment variables are needed:
 1. WMENU_ROOT_MENU - name of root menu (example 'MainMenu' for ops, 'MainMenuUITF' for itf)
 
 ## Build 
-This project is built with [Java 21](https://adoptium.net/) (compiled to Java 21 bytecode), and uses the [Gradle 7](https://gradle.org/) build tool to automatically download dependencies and build the project from source:
+This project is built with [Java 21](https://adoptium.net/) (compiled to Java 21 bytecode), and uses the [Gradle 9](https://gradle.org/) build tool to automatically download dependencies and build the project from source:
 
 ```
 git clone https://github.com/JeffersonLab/wmenu
@@ -57,7 +57,7 @@ WMENU_ROOT_MENU=MainMenu
 
 
 ## Deploy
-At JLab this app is found at [epicsweb.jlab.org/wmenu](https://epicsweb.jlab.org/wmenu/), plus other fiefdom specific subpaths, and internally at [epicswebtest.acc.jlab.org/wmenu](https://epicswebtest.acc.jlab.org/wmenu/).  However, the epicsweb server is a proxy for `epicswebops.acc.jlab.org`, `epicswebops2.acc.jlab.org`, `epicswebchl.acc.jlab.org`, `epicswebfel.acc.jlab.org`, `epicswebsrf.acc.jlab.org` and `epicswebitf.acc.jlab.org`.  Additionally, the context root for each is adjusted with a prefix such that all servers can be reached from a single namespace.  The context root prefixes are `/`, `/ops2`, `/chl`, `/fel`, `/srf`, and `/itf` respectively.  Tomcat interprets context roots from _war_ file name unless overridden elsewhere.  Therefore each _war_ must be prefixed with `<prefix>#`.    Use wget or the like to grab the release war file.  Don't download directly into webapps dir as file scanner may attempt to deploy before fully downloaded.  Be careful of previous war file as by default wget won't overrwite.  The war file should be attached to each release, so right click it and copy location (or just update version in path provided in the example below).  Example for chl fiefdom:
+At JLab this app is found at [epicsweb.jlab.org/wmenu](https://epicsweb.jlab.org/wmenu/), plus other fiefdom specific subpaths, and internally at [epicswebtest9.acc.jlab.org/wmenu](https://epicswebtest9.acc.jlab.org/wmenu/).  However, the epicsweb server is a proxy for `epicswebops9.acc.jlab.org`, `epicswebops99.acc.jlab.org`, `epicswebchl9.acc.jlab.org`, `epicsweblerf9.acc.jlab.org`, `epicswebsrf9.acc.jlab.org` and `epicswebuitf9.acc.jlab.org`.  Additionally, the context root for each is adjusted with a prefix such that all servers can be reached from a single namespace.  The context root prefixes are `/`, `/ops2`, `/chl`, `/fel`, `/srf`, and `/itf` respectively.  Tomcat interprets context roots from _war_ file name unless overridden elsewhere.  Therefore each _war_ must be prefixed with `<prefix>#`.    Use wget or the like to grab the release war file.  Don't download directly into webapps dir as file scanner may attempt to deploy before fully downloaded.  Be careful of previous war file as by default wget won't overrwite.  The war file should be attached to each release, so right click it and copy location (or just update version in path provided in the example below).  Example for chl fiefdom:
 
 ```
 cd /tmp
