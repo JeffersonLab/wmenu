@@ -8,6 +8,8 @@ on:
 
 jobs:
   release:
+    permissions:
+      contents: write
     uses: jeffersonlab/java-workflows/.github/workflows/gh-release.yaml@v2
     with:
       files: build/libs/wmenu.war
