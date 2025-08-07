@@ -14,8 +14,8 @@ Web version of JMenu
 ---
 
 ## Install
-   1. Download Java 8+
-   1. Download [Apache Tomcat 7, 8, or 9](http://tomcat.apache.org/)
+   1. Download Java 21
+   1. Download [Apache Tomcat 11](http://tomcat.apache.org/)
    1. Download [wmenu.war](https://github.com/JeffersonLab/wmenu/releases) and drop it into the Tomcat webapps directory
    1. Start Tomcat and navigate your web browser to localhost:8080/wmenu
 
@@ -28,7 +28,7 @@ Environment variables are needed:
 1. WMENU_ROOT_MENU - name of root menu (example 'MainMenu' for ops, 'MainMenuUITF' for itf)
 
 ## Build 
-This project is built with [Java 17](https://adoptium.net/) (compiled to Java 8 bytecode), and uses the [Gradle 7](https://gradle.org/) build tool to automatically download dependencies and build the project from source:
+This project is built with [Java 21](https://adoptium.net/) (compiled to Java 21 bytecode), and uses the [Gradle 7](https://gradle.org/) build tool to automatically download dependencies and build the project from source:
 
 ```
 git clone https://github.com/JeffersonLab/wmenu
