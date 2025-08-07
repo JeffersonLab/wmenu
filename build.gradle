@@ -26,6 +26,10 @@ dependencies {
   	testImplementation 'junit:junit:4.13.2'
 }
 
+tasks.named('jar') {
+    enabled = false
+}
+
 war {
     archiveFileName = 'wmenu.war'
     filesMatching('WEB-INF/web.xml') {
