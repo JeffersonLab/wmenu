@@ -1,6 +1,7 @@
 plugins {
     id 'java'
 	id 'war'
+    id 'com.diffplug.spotless' version '7.2.1'
 }
 
 description = "Web-based JMenu"
@@ -39,5 +40,11 @@ war {
         filter {
             String line -> line.replaceAll("@RELEASE_DATE@", releaseDate)
         }
+    }
+}
+
+spotless {
+    java {
+        googleJavaFormat()
     }
 }
