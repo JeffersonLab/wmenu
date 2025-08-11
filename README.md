@@ -57,7 +57,7 @@ WMENU_ROOT_MENU=MainMenu
 
 
 ## Deploy
-At JLab this app is found at [epicsweb.jlab.org/wmenu](https://epicsweb.jlab.org/wmenu/), plus other fiefdom specific subpaths, and internally at [epicswebtest9.acc.jlab.org/wmenu](https://epicswebtest9.acc.jlab.org/wmenu/).  However, the epicsweb server is a proxy for `epicswebops9.acc.jlab.org`, `epicswebops99.acc.jlab.org`, `epicswebchl9.acc.jlab.org`, `epicsweblerf9.acc.jlab.org`, `epicswebsrf9.acc.jlab.org` and `epicswebuitf9.acc.jlab.org`.  Additionally, the context root for each is adjusted with a prefix such that all servers can be reached from a single namespace.  The context root prefixes are `/`, `/ops2`, `/chl`, `/fel`, `/srf`, and `/itf` respectively.  Tomcat interprets context roots from _war_ file name unless overridden elsewhere.  Therefore each _war_ must be prefixed with `<prefix>#`.    Use wget or the like to grab the release war file.  Don't download directly into webapps dir as file scanner may attempt to deploy before fully downloaded.  Be careful of previous war file as by default wget won't overrwite.  The war file should be attached to each release, so right click it and copy location (or just update version in path provided in the example below).  Example for chl fiefdom:
+At JLab this app is found at [epicsweb.jlab.org/wmenu](https://epicsweb.jlab.org/wmenu/), plus other fiefdom specific subpaths, and internally at [epicswebtest9.acc.jlab.org/wmenu](https://epicswebtest9.acc.jlab.org/wmenu/).  However, the epicsweb server is a proxy for `epicswebops9.acc.jlab.org`, `epicswebops99.acc.jlab.org`, `epicswebchl9.acc.jlab.org`, `epicsweblerf9.acc.jlab.org`, `epicswebsrf9.acc.jlab.org` and `epicswebuitf9.acc.jlab.org`.  Additionally, the context root for each is adjusted with a prefix such that all servers can be reached from a single namespace.  The context root prefixes are `/`, `/ops2`, `/chl`, `/fel`, `/srf`, and `/itf` respectively.  Tomcat interprets context roots from _war_ file name unless overridden elsewhere.  Therefore each _war_ must be prefixed with `<prefix>#`.    Use wget or the like to grab the release war file.  Don't download directly into webapps dir as file scanner may attempt to deploy before fully downloaded.  Be careful of previous war file as by default wget won't overrwite.  The war file should be attached to each release, so right click it and copy location (or just update version in path provided in the example below).
 
 A script is provided to automate the deployment.  As root run:
 ```
@@ -71,7 +71,7 @@ cd /tmp
 rm wmenu.war
 wget https://github.com/JeffersonLab/wmenu/releases/download/v1.2.3/wmenu.war
 mv wmenu.war chl#wmenu.war
-mv  chl#wmenu.war /usr/share/tomcat/webapps
+mv  chl#wmenu.war /opt/tomcat/current/webapps
 ```
 
 ## See Also
