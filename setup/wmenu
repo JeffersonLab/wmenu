@@ -1,0 +1,4 @@
+DOWNLOAD_URL=https://github.com/JeffersonLab/wmenu/releases/download/$TAG/wmenu.war
+WAR_FILE=wmenu.war
+TOMCAT_APP_HOME=/opt/tomcat/current
+PREFIX=

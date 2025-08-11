@@ -1,0 +1,4 @@
+DOWNLOAD_URL=https://github.com/JeffersonLab/epics2web/releases/download/$TAG/epics2web.war
+WAR_FILE=epics2web.war
+TOMCAT_APP_HOME=/opt/tomcat/current
+PREFIX=
