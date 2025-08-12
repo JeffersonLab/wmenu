@@ -2,8 +2,7 @@
 
 VARIABLES=(DOWNLOAD_URL
            WAR_FILE
-           TOMCAT_APP_HOME
-           PREFIX)
+           TOMCAT_APP_HOME)
 
 if [[ $# -eq 0 ]] ; then
     echo "Usage: $0 [var file] <GitHub tag/version>"
@@ -28,6 +27,10 @@ fi
 
 TAG=$2
 
+if [[ $TAG != 'v'* ]]; then
+TAG=v$TAG
+fi
+
 . $ENV_FILE
 fi
 
@@ -41,10 +44,20 @@ done
 deploy() {
 cd /tmp
 rm -rf /tmp/${WAR_FILE}
-rm -rf "/tmp/${PREFIX}#${WAR_FILE}"
 wget ${DOWNLOAD_URL}
-mv /tmp/${WAR_FILE} "/tmp/${PREFIX}#${WAR_FILE}"
-cp "/tmp/${PREFIX}#${WAR_FILE}" ${TOMCAT_APP_HOME}/webapps
+
+# If PREFIX set
+if [[ -n "${PREFIX}" ]]; then
+  # Ensure it starts with hash
+  if [[ $PREFIX != '#'* ]]; then
+    PREFIX="#${PREFIX}"
+  fi
+
+  rm -rf "/tmp/${PREFIX}${WAR_FILE}"
+  mv /tmp/${WAR_FILE} "/tmp/${PREFIX}${WAR_FILE}"
+fi
+
+cp "/tmp/${PREFIX}${WAR_FILE}" ${TOMCAT_APP_HOME}/webapps
 }
 
 deploy
