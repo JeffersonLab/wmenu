@@ -73,7 +73,7 @@ then
   sysctl -w net.ipv4.ip_unprivileged_port_start=${APP_HTTPS_PORT} >> /etc/sysctl.conf
 fi
 
-CLASSPATH=${APP_HOME}/bin/bootstrap.jar:${APP_HOME}/bin/tomcat-juli.jar
+CLASSPATH=${APP_HOME}/current/bin/bootstrap.jar:${APP_HOME}/current/bin/tomcat-juli.jar
 
 cat > /etc/systemd/system/tomcat.service << EOF
 [Unit]
