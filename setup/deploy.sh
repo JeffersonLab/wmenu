@@ -48,9 +48,9 @@ wget ${DOWNLOAD_URL}
 
 # If PREFIX set
 if [[ -n "${PREFIX}" ]]; then
-  # Ensure it starts with hash
-  if [[ $PREFIX != '#'* ]]; then
-    PREFIX="#${PREFIX}"
+  # Ensure it ends with hash
+  if [[ $PREFIX != *'#' ]]; then
+    PREFIX="${PREFIX}#"
   fi
 
   rm -rf "/tmp/${PREFIX}${WAR_FILE}"
