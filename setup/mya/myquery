@@ -1,0 +1,3 @@
+DOWNLOAD_URL=https://github.com/JeffersonLab/myquery/releases/download/$TAG/myquery.war
+WAR_FILE=myquery.war
+TOMCAT_APP_HOME=/opt/tomcat/current

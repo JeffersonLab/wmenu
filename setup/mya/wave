@@ -1,0 +1,3 @@
+DOWNLOAD_URL=https://github.com/JeffersonLab/wave/releases/download/$TAG/wave.war
+WAR_FILE=wave.war
+TOMCAT_APP_HOME=/opt/tomcat/current
