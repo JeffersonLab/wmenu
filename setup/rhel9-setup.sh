@@ -3,6 +3,7 @@
 FUNCTIONS=(create_user_and_group
            download
            install
+           create_symbolic_links
            adjust_java
            create_systemd_service
            create_log_file_cleanup_cron)
