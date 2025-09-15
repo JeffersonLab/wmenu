@@ -61,6 +61,12 @@ chown -R ${APP_USER}:${APP_GROUP} /opt/tomcat
 chmod +x /opt/tomcat/current/bin/*.sh
 }
 
+create_symbolic_links() {
+cd /opt/tomcat
+ln -s current/conf conf
+ln -s current/logs logs
+}
+
 adjust_java() {
 yum install java-21-openjdk -y
 yum remove java-11-openjdk-headless -y
