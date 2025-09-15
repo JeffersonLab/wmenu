@@ -86,8 +86,9 @@ User=${APP_USER}
 Group=${APP_GROUP}
 ExecStart=${JAVA_HOME} \
  -classpath ${CLASSPATH} \
- -Xms64m \
- -Xmx1024m \
+ -server \
+ -Xms2048m \
+ -Xmx2048m \
  -XX:MetaspaceSize=96M \
  -XX:MaxMetaspaceSize=512m \
  -Djava.net.preferIPv4Stack=true \
